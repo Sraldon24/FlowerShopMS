@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ExternalStorageConfigurationManager" enabled="true" />
+  <component name="FrameworkDetectionExcludesConfiguration">
+    <file type="web" url="file://$PROJECT_DIR$/Employee" />
+    <file type="web" url="file://$PROJECT_DIR$/Inventory" />
+    <file type="web" url="file://$PROJECT_DIR$/Sales" />
+    <file type="web" url="file://$PROJECT_DIR$/Suppliers" />
+  </component>
+  <component name="ProjectRootManager">
+    <output url="file://$PROJECT_DIR$/out" />
+  </component>
+</project>

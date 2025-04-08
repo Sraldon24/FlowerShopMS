@@ -1,0 +1,38 @@
+version: '3.8'
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    volumes:
+      - logs:/app/logs
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+    depends_on:
+      employee-db:
+        condition: service_healthy
+
+  employee-db:
+    image: mysql:8.0
+    container_name: employee-db
+    ports:
+      - "3309:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: verysecretpwd
+      MYSQL_DATABASE: employee-db
+      MYSQL_USER: user
+      MYSQL_PASSWORD: pwd
+    volumes:
+      - db_data:/var/lib/mysql
+    healthcheck:
+      test: [ "CMD", "mysqladmin", "ping", "-uuser", "-ppwd", "-h", "localhost" ]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+volumes:
+  logs:
+  db_data:
