@@ -3,6 +3,7 @@
    =========================== */
 package com.champsoft.services.inventory.BusinessLayer.Flower;
 
+import com.champsoft.services.inventory.Client.SuppliersServiceClient;
 import com.champsoft.services.inventory.DataLayer.Flowers.Flower;
 import com.champsoft.services.inventory.DataLayer.Flowers.FlowerRepository;
 import com.champsoft.services.inventory.DataLayer.Flowers.FlowersIdentifier;
@@ -22,21 +23,28 @@ public class FlowerServiceImpl implements FlowerService {
     private final FlowerRepository flowerRepository;
     private final FlowerRequestMapper flowerRequestMapper;
     private final FlowerResponseMapper flowerResponseMapper;
+    private final SuppliersServiceClient suppliersServiceClient;
 
     public FlowerServiceImpl(
             FlowerRepository flowerRepository,
             FlowerRequestMapper flowerRequestMapper,
-            FlowerResponseMapper flowerResponseMapper
+            FlowerResponseMapper flowerResponseMapper,
+            SuppliersServiceClient suppliersServiceClient
     ) {
         this.flowerRepository = flowerRepository;
         this.flowerRequestMapper = flowerRequestMapper;
         this.flowerResponseMapper = flowerResponseMapper;
+        this.suppliersServiceClient = suppliersServiceClient;
     }
 
     @Override
     public List<FlowerResponseModel> getAllFlowers() {
         return flowerRepository.findAll().stream()
-                .map(flowerResponseMapper::entityToResponseModel)
+                .map(flower -> {
+                    FlowerResponseModel response = flowerResponseMapper.entityToResponseModel(flower);
+                    response.setSupplier(suppliersServiceClient.getSupplierBySupplierId(flower.getSupplierIdentifier()));
+                    return response;
+                })
                 .collect(Collectors.toList());
     }
 
@@ -44,7 +52,9 @@ public class FlowerServiceImpl implements FlowerService {
     public FlowerResponseModel getFlowerById(String flowerId) {
         Flower flower = flowerRepository.findByFlowersIdentifier_FlowerNumber(flowerId)
                 .orElseThrow(() -> new RuntimeException("Flower not found with ID: " + flowerId));
-        return flowerResponseMapper.entityToResponseModel(flower);
+        FlowerResponseModel response = flowerResponseMapper.entityToResponseModel(flower);
+        response.setSupplier(suppliersServiceClient.getSupplierBySupplierId(flower.getSupplierIdentifier()));
+        return response;
     }
 
     @Override

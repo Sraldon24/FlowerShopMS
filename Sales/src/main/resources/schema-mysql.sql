@@ -12,9 +12,11 @@ create TABLE sales (
                        supplier_id VARCHAR(36),
                        employee_id VARCHAR(36),
                        inventory_id VARCHAR(36),
-                       flower_id VARCHAR(36),
-                       FOREIGN KEY (supplier_id) REFERENCES suppliers(supplier_identifier),
-                       FOREIGN KEY (employee_id) REFERENCES employees(employee_identifier),
-                       FOREIGN KEY (inventory_id) REFERENCES inventories(inventory_identifier),
-                       FOREIGN KEY (flower_id) REFERENCES flowers(flower_identifier)
+                       flower_id VARCHAR(36)
+
+                       -- Foreign keys removed to avoid cross-service FK issues
+--                       ,FOREIGN KEY (supplier_id) REFERENCES suppliers(supplier_identifier),
+--                       FOREIGN KEY (employee_id) REFERENCES employees(employee_identifier),
+--                       FOREIGN KEY (inventory_id) REFERENCES inventories(inventory_identifier),
+--                       FOREIGN KEY (flower_id) REFERENCES flowers(flower_identifier)
 );

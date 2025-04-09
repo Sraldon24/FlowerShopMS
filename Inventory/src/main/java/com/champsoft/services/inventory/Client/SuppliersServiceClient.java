@@ -28,8 +28,8 @@ public class SuppliersServiceClient {
 
     public SuppliersServiceClient(RestTemplate restTemplate,
                                   ObjectMapper mapper,
-                                  @Value("${app.suppliers-service.host}") String supplierHost,
-                                  @Value("${app.suppliers-service.port}") String supplierPort) {
+                                  @Value("${spring.app.suppliers-service.host}") String supplierHost,
+                                  @Value("${spring.app.suppliers-service.port}") String supplierPort) {
         this.restTemplate = restTemplate;
         this.mapper = mapper;
         this.SUPPLIER_SERVICE_BASE_URL = "http://" + supplierHost + ":" + supplierPort + "/api/v1/suppliers";

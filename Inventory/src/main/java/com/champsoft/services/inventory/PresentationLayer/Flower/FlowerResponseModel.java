@@ -4,6 +4,7 @@
 package com.champsoft.services.inventory.PresentationLayer.Flower;
 
 import com.champsoft.services.inventory.PresentationLayer.OptionDto;
+import com.champsoft.services.inventory.PresentationLayer.supplierdtos.SupplierResponseModel;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -26,4 +27,5 @@ public class FlowerResponseModel {
     private BigDecimal price; // Matches price_amount
     private String currency; // Matches price_currency
     private List<OptionDto> options; // Matches flower_options
+    private SupplierResponseModel supplier;
 }

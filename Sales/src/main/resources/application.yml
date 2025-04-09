@@ -16,11 +16,13 @@ spring:
   config:
     activate:
       on-profile: docker
+
   datasource:
     url: jdbc:mysql://sales-db:3306/sales-db
     username: user
     password: pwd
     driver-class-name: com.mysql.cj.jdbc.Driver
+
   jpa:
     hibernate:
       ddl-auto: none
@@ -29,9 +31,22 @@ spring:
       hibernate:
         format_sql: true
         dialect: org.hibernate.dialect.MySQL8Dialect
+
   sql:
     init:
       platform: mysql
       mode: always
       logging:
         enabled: true
+
+app:
+  suppliers-service:
+    host: suppliers-service
+    port: 8080
+
+  employees-service:
+    host: employee-service
+    port: 8080
+
+  inventory-service:
+    base-url: http://inventory-service:8080/api/v1/inventories

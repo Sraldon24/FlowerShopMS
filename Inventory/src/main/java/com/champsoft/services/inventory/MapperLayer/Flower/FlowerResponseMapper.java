@@ -15,7 +15,7 @@ import java.util.List;
 @Mapper(componentModel = "spring", uses = {OptionMapper.class, PriceMapper.class})
 public interface FlowerResponseMapper {
 
-    @Mapping(source = "flowersIdentifier.flowerNumber", target = "flowerId") // Map flowerNumber to flowerId
+    @Mapping(source = "flowersIdentifier.flowerNumber", target = "flowerId")
     @Mapping(source = "inventoryIdentifier.inventoryId", target = "inventoryId")
     @Mapping(source = "flowerName", target = "flowerName")
     @Mapping(source = "flowerColor", target = "flowerColor")
@@ -26,7 +26,10 @@ public interface FlowerResponseMapper {
     @Mapping(source = "price.amount", target = "price")
     @Mapping(source = "price.currency", target = "currency")
     @Mapping(source = "options", target = "options", qualifiedByName = "entityListToDtoList")
+    @Mapping(target = "supplier", ignore = true)
+        // <--- add this line
     FlowerResponseModel entityToResponseModel(Flower flower);
 
     List<FlowerResponseModel> entityListToResponseModelList(List<Flower> flowers);
 }
+

@@ -20,8 +20,7 @@ create TABLE flowers (
                          price_amount DECIMAL(19,2),
                          price_currency VARCHAR(3),
                          supplier_id VARCHAR(36) NOT NULL,
-                         FOREIGN KEY (inventory_id) REFERENCES inventories(inventory_identifier),
-                         FOREIGN KEY (supplier_id) REFERENCES suppliers(supplier_identifier)
+                         FOREIGN KEY (inventory_id) REFERENCES inventories(inventory_identifier)
 );
 
 -- Flower additional options(part of the inventory)

@@ -3,7 +3,6 @@
    ============================== */
 package com.champsoft.services.inventory.PresentationLayer.supplierdtos;
 
-import com.champsoft.services.sales.PresentationLayer.supplierdtos.SupplierPhoneNumber;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
