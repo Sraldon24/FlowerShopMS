@@ -1,7 +1,7 @@
 package com.champsoft.services.inventory.MapperLayer;
 
 import com.champsoft.services.inventory.DataLayer.Flowers.Price;
-import com.champsoft.services.utils.Currency;
+import com.champsoft.services.inventory.utils.Currency;
 import org.mapstruct.Mapper;
 import org.mapstruct.Named;
 

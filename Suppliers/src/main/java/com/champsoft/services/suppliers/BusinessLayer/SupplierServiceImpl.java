@@ -9,7 +9,7 @@ import com.champsoft.services.suppliers.Mapperlayer.SupplierRequestMapper;
 import com.champsoft.services.suppliers.Mapperlayer.SupplierResponseMapper;
 import com.champsoft.services.suppliers.PresentationLayer.SupplierRequestModel;
 import com.champsoft.services.suppliers.PresentationLayer.SupplierResponseModel;
-import com.champsoft.services.utils.NotFoundException;
+import com.champsoft.services.suppliers.utils.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

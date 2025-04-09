@@ -1,8 +1,9 @@
 /* ==============================
    SupplierResponseModel.java
    ============================== */
-package com.champsoft.services.suppliers.services.suppliers.PresentationLayer;
+package com.champsoft.services.inventory.PresentationLayer.supplierdtos;
 
+import com.champsoft.services.sales.PresentationLayer.supplierdtos.PhoneNumberDTO;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

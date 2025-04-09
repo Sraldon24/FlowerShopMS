@@ -1,4 +1,4 @@
-package com.champsoft.services.suppliers.services.utils;
+package com.champsoft.services.employee.utils;
 
 public class NotFoundException extends RuntimeException {
     public NotFoundException() {

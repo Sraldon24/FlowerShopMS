@@ -1,4 +1,4 @@
-package com.champsoft.services.suppliers.services.utils;
+package com.champsoft.services.inventory.utils;
 
 
 public class InvalidInputException extends RuntimeException {

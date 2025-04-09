@@ -1,7 +1,7 @@
 /* =========================
    SupplierController.java
    ========================= */
-package com.champsoft.services.suppliers.services.suppliers.PresentationLayer;
+package com.champsoft.services.suppliers.PresentationLayer;
 
 import com.champsoft.services.suppliers.BusinessLayer.SupplierServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -11,7 +11,7 @@ import com.champsoft.services.inventory.MapperLayer.Flower.FlowerRequestMapper;
 import com.champsoft.services.inventory.MapperLayer.Flower.FlowerResponseMapper;
 import com.champsoft.services.inventory.PresentationLayer.Flower.FlowerRequestModel;
 import com.champsoft.services.inventory.PresentationLayer.Flower.FlowerResponseModel;
-import com.champsoft.services.utils.Currency;
+import com.champsoft.services.inventory.utils.Currency;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

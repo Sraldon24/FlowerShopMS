@@ -15,8 +15,8 @@ import com.champsoft.services.sales.MapperLayer.PurchaseOrderRequestModelMapper;
 import com.champsoft.services.sales.MapperLayer.PurchaseOrderResponseModelMapper;
 import com.champsoft.services.sales.PresentationLayer.PurchaseRequestModel;
 import com.champsoft.services.sales.PresentationLayer.PurchaseResponseModel;
-import com.champsoft.services.utils.Currency;
-import com.champsoft.services.utils.NotFoundException;
+import com.champsoft.services.sales.utils.Currency;
+import com.champsoft.services.sales.utils.NotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;

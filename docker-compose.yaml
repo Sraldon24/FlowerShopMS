@@ -1,0 +1,113 @@
+version: '3.8'
+
+services:
+  suppliers-service:
+    build: ./Suppliers
+    container_name: suppliers-service
+    ports:
+      - "8081:8080"
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+    depends_on:
+      suppliers-db:
+        condition: service_healthy
+
+  suppliers-db:
+    image: mysql:8.0
+    container_name: suppliers-db
+    ports:
+      - "3307:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: verysecretpwd
+      MYSQL_DATABASE: suppliers-db
+      MYSQL_USER: user
+      MYSQL_PASSWORD: pwd
+    healthcheck:
+      test: [ "CMD", "mysqladmin", "ping", "-uuser", "-ppwd", "-h", "localhost" ]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  inventory-service:
+    build: ./Inventory
+    container_name: inventory-service
+    ports:
+      - "8082:8080"
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+    depends_on:
+      inventory-db:
+        condition: service_healthy
+
+  inventory-db:
+    image: mysql:8.0
+    container_name: inventory-db
+    ports:
+      - "3308:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: verysecretpwd
+      MYSQL_DATABASE: inventory-db
+      MYSQL_USER: user
+      MYSQL_PASSWORD: pwd
+    healthcheck:
+      test: [ "CMD", "mysqladmin", "ping", "-uuser", "-ppwd", "-h", "localhost" ]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  employee-service:
+    build: ./Employee
+    container_name: employee-service
+    ports:
+      - "8083:8080"
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+    depends_on:
+      employee-db:
+        condition: service_healthy
+
+  employee-db:
+    image: mysql:8.0
+    container_name: employee-db
+    ports:
+      - "3309:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: verysecretpwd
+      MYSQL_DATABASE: employee-db
+      MYSQL_USER: user
+      MYSQL_PASSWORD: pwd
+    healthcheck:
+      test: [ "CMD", "mysqladmin", "ping", "-uuser", "-ppwd", "-h", "localhost" ]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  sales-service:
+    build: ./Sales
+    container_name: sales-service
+    ports:
+      - "8084:8080"
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+    depends_on:
+      sales-db:
+        condition: service_healthy
+
+  sales-db:
+    image: mysql:8.0
+    container_name: sales-db
+    ports:
+      - "3310:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: verysecretpwd
+      MYSQL_DATABASE: sales-db
+      MYSQL_USER: user
+      MYSQL_PASSWORD: pwd
+    healthcheck:
+      test: [ "CMD", "mysqladmin", "ping", "-uuser", "-ppwd", "-h", "localhost" ]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+volumes:
+  db_data:

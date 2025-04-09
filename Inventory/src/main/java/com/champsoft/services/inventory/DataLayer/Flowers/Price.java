@@ -1,6 +1,6 @@
 package com.champsoft.services.inventory.DataLayer.Flowers;
 
-import com.champsoft.services.utils.Currency;
+import com.champsoft.services.inventory.utils.Currency;
 import jakarta.persistence.Embeddable;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;

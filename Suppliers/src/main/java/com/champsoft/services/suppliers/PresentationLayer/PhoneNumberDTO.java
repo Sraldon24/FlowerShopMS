@@ -1,7 +1,7 @@
 /* ======================
    PhoneNumberDTO.java
    ====================== */
-package com.champsoft.services.suppliers.services.suppliers.PresentationLayer;
+package com.champsoft.services.suppliers.PresentationLayer;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

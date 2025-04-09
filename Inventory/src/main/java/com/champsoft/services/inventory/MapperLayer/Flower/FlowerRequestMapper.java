@@ -10,6 +10,7 @@ import com.champsoft.services.inventory.PresentationLayer.Flower.FlowerRequestMo
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
+
 @Mapper(componentModel = "spring", uses = {OptionMapper.class, PriceMapper.class})
 public interface FlowerRequestMapper {
 
@@ -29,7 +30,12 @@ public interface FlowerRequestMapper {
     @Mapping(source = "options", target = "options", qualifiedByName = "dtoListToEntityList")
 
     // ✅ Instead of separate mapping, correctly map price and currency inside PriceMapper
-    @Mapping(target = "price", expression = "java(new com.champsoft.services.inventory.DataLayer.Flowers.Price(flowerRequestModel.getPrice(), com.champsoft.services.utils.Currency.valueOf(flowerRequestModel.getCurrency())))")
+    @Mapping(
+            target = "price",
+            expression = "java(new com.champsoft.services.inventory.DataLayer.Flowers.Price(flowerRequestModel.getPrice(), com.champsoft.services.inventory.utils.Currency.valueOf(flowerRequestModel.getCurrency())))"
+    )
+
+
     Flower requestModelToEntity(FlowerRequestModel flowerRequestModel);
 }
 

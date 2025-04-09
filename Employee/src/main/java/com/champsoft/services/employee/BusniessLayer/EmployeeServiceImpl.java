@@ -6,7 +6,7 @@ import com.champsoft.services.employee.MapperLayer.EmployeeRequestMapper;
 import com.champsoft.services.employee.MapperLayer.EmployeeResponseMapper;
 import com.champsoft.services.employee.PresentationLayer.EmployeeRequestModel;
 import com.champsoft.services.employee.PresentationLayer.EmployeeResponseModel;
-import com.champsoft.services.utils.NotFoundException;
+import com.champsoft.services.employee.utils.NotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

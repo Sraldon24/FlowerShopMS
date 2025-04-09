@@ -1,13 +1,10 @@
-/* ========================================
-   SuppliersServiceClient.java
-   ======================================== */
-package com.champsoft.services.sales.Client;
+package com.champsoft.services.inventory.Client;
 
 
-import com.champsoft.services.sales.PresentationLayer.supplierdtos.SupplierResponseModel;
-import com.champsoft.services.sales.utils.HttpErrorInfo;
-import com.champsoft.services.sales.utils.InvalidInputException;
-import com.champsoft.services.sales.utils.NotFoundException;
+import com.champsoft.services.inventory.PresentationLayer.supplierdtos.SupplierResponseModel;
+import com.champsoft.services.inventory.utils.HttpErrorInfo;
+import com.champsoft.services.inventory.utils.InvalidInputException;
+import com.champsoft.services.inventory.utils.NotFoundException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
