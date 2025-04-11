@@ -1,12 +1,8 @@
-/* ==========================
-   SupplierRepository.java
-   ========================== */
 package com.champsoft.services.suppliers.DataLayer;
 
-import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.mongodb.repository.MongoRepository;
 
-public interface SupplierRepository extends JpaRepository<Supplier, Integer> {
+public interface SupplierRepository extends MongoRepository<Supplier, String> {
     Supplier findSupplierBySupplierIdentifier(String supplierIdentifier);
-
     Supplier findSupplierByEmailAddress(String emailAddress);
 }

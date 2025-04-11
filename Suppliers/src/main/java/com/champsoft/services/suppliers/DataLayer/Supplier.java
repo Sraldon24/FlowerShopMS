@@ -1,53 +1,33 @@
-/* =============
-   Supplier.java
-   ============= */
 package com.champsoft.services.suppliers.DataLayer;
 
-import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.List;
 
-@Entity
-@Table(name = "suppliers")
+@Document(collection = "suppliers") // MongoDB collection name
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
 public class Supplier {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private String id;  // MongoDB uses String IDs (Hex ObjectIds or UUIDs)
 
-    @Column(name = "supplier_identifier", unique = true, nullable = false)
     private String supplierIdentifier;
-
-    @Column(name = "company_name")
     private String companyName;
-
-    @Column(name = "contact_person")
     private String contactPerson;
-
-    @Column(name = "email_address")
     private String emailAddress;
-
     private String username;
     private String password;
 
-    @Embedded
     private Address address;
-
-    @ElementCollection(fetch = FetchType.EAGER)
-    @CollectionTable(
-            name = "supplier_phonenumbers",
-            joinColumns = @JoinColumn(name = "supplier_id")
-    )
     private List<SupplierPhoneNumber> phoneNumbers;
 
-    @PrePersist
-    public void prePersist() {
+    public void generateIdentifierIfMissing() {
         if (this.supplierIdentifier == null || this.supplierIdentifier.isEmpty()) {
             this.supplierIdentifier = java.util.UUID.randomUUID().toString();
         }

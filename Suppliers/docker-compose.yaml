@@ -12,23 +12,21 @@ services:
     environment:
       - SPRING_PROFILES_ACTIVE=docker
     depends_on:
-      suppliers-db:
+      mongo:
         condition: service_healthy
 
-  suppliers-db:
-    image: mysql:8.0
+  mongo:
+    image: mongo:6.0
     container_name: suppliers-db
     ports:
-      - "3307:3306"
+      - "27017:27017"
     environment:
-      MYSQL_ROOT_PASSWORD: verysecretpwd
-      MYSQL_DATABASE: suppliers-db
-      MYSQL_USER: user
-      MYSQL_PASSWORD: pwd
+      MONGO_INITDB_ROOT_USERNAME: user
+      MONGO_INITDB_ROOT_PASSWORD: pwd
     volumes:
-      - db_data:/var/lib/mysql
+      - db_data:/data/db
     healthcheck:
-      test: [ "CMD", "mysqladmin", "ping", "-uuser", "-ppwd", "-h", "localhost" ]
+      test: ["CMD", "mongosh", "--quiet", "--eval", "db.adminCommand('ping')"]
       interval: 10s
       timeout: 5s
       retries: 10

@@ -1,8 +1,4 @@
-/* ======================================
-   EmployeesServiceClient.java
-   ====================================== */
 package com.champsoft.services.sales.Client;
-
 
 import com.champsoft.services.sales.PresentationLayer.employeedtos.EmployeeResponseModel;
 import com.champsoft.services.sales.utils.HttpErrorInfo;
@@ -30,11 +26,10 @@ public class EmployeesServiceClient {
 
     public EmployeesServiceClient(RestTemplate restTemplate,
                                   ObjectMapper mapper,
-                                  @Value("${app.employees-service.host}") String employeeHost,
-                                  @Value("${app.employees-service.port}") String employeePort) {
+                                  @Value("${app.gateway.base-url}") String gatewayBaseUrl) {
         this.restTemplate = restTemplate;
         this.mapper = mapper;
-        this.EMPLOYEE_SERVICE_BASE_URL = "http://" + employeeHost + ":" + employeePort + "/api/v1/employees";
+        this.EMPLOYEE_SERVICE_BASE_URL = gatewayBaseUrl + "/employees"; // ✅ Fixed
     }
 
     public EmployeeResponseModel getEmployeeByEmployeeId(String employeeId) {
@@ -52,9 +47,7 @@ public class EmployeesServiceClient {
             String message = mapper.readValue(ex.getResponseBodyAsString(), HttpErrorInfo.class).getMessage();
             if (ex.getStatusCode() == NOT_FOUND) return new NotFoundException(message);
             if (ex.getStatusCode() == UNPROCESSABLE_ENTITY) return new InvalidInputException(message);
-        } catch (IOException ignored) {
-        }
+        } catch (IOException ignored) {}
         return ex;
     }
 }
-

@@ -16,22 +16,27 @@ spring:
   config:
     activate:
       on-profile: docker
+
   datasource:
-    url: jdbc:mysql://employee-db:3306/employee-db
-    username: user
-    password: pwd
-    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:postgresql://employee-db:5432/employee-db  # Matches POSTGRES_DB
+    username: user                                        # Matches POSTGRES_USER
+    password: pwd                                         # Matches POSTGRES_PASSWORD
+    driver-class-name: org.postgresql.Driver
+
   jpa:
     hibernate:
-      ddl-auto: none
+      ddl-auto: none                                      # Use 'none' if you're using schema.sql
     show-sql: true
     properties:
       hibernate:
         format_sql: true
-        dialect: org.hibernate.dialect.MySQL8Dialect
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+
   sql:
     init:
-      platform: mysql
+      platform: postgres
       mode: always
+      schema-locations: classpath:schema-postgres.sql
+      data-locations: classpath:data-postgres.sql
       logging:
         enabled: true

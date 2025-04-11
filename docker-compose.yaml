@@ -1,6 +1,7 @@
 version: '3.8'
 
 services:
+
   suppliers-service:
     build: ./Suppliers
     container_name: suppliers-service
@@ -13,17 +14,17 @@ services:
         condition: service_healthy
 
   suppliers-db:
-    image: mysql:8.0
+    image: mongo:6.0
     container_name: suppliers-db
     ports:
-      - "3307:3306"
+      - "27017:27017"
     environment:
-      MYSQL_ROOT_PASSWORD: verysecretpwd
-      MYSQL_DATABASE: suppliers-db
-      MYSQL_USER: user
-      MYSQL_PASSWORD: pwd
+      MONGO_INITDB_ROOT_USERNAME: user
+      MONGO_INITDB_ROOT_PASSWORD: pwd
+    volumes:
+      - suppliers_mongo_data:/data/db
     healthcheck:
-      test: [ "CMD", "mysqladmin", "ping", "-uuser", "-ppwd", "-h", "localhost" ]
+      test: ["CMD", "mongosh", "--quiet", "--eval", "db.adminCommand('ping')"]
       interval: 10s
       timeout: 5s
       retries: 10
@@ -49,6 +50,8 @@ services:
       MYSQL_DATABASE: inventory-db
       MYSQL_USER: user
       MYSQL_PASSWORD: pwd
+    volumes:
+      - inventory_mysql_data:/var/lib/mysql
     healthcheck:
       test: [ "CMD", "mysqladmin", "ping", "-uuser", "-ppwd", "-h", "localhost" ]
       interval: 10s
@@ -67,17 +70,18 @@ services:
         condition: service_healthy
 
   employee-db:
-    image: mysql:8.0
+    image: postgres:16
     container_name: employee-db
     ports:
-      - "3309:3306"
+      - "5433:5432"
     environment:
-      MYSQL_ROOT_PASSWORD: verysecretpwd
-      MYSQL_DATABASE: employee-db
-      MYSQL_USER: user
-      MYSQL_PASSWORD: pwd
+      POSTGRES_DB: employee-db
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: pwd
+    volumes:
+      - employee_pgdata:/var/lib/postgresql/data
     healthcheck:
-      test: [ "CMD", "mysqladmin", "ping", "-uuser", "-ppwd", "-h", "localhost" ]
+      test: ["CMD-SHELL", "pg_isready -U user"]
       interval: 10s
       timeout: 5s
       retries: 10
@@ -103,11 +107,33 @@ services:
       MYSQL_DATABASE: sales-db
       MYSQL_USER: user
       MYSQL_PASSWORD: pwd
+    volumes:
+      - sales_mysql_data:/var/lib/mysql
     healthcheck:
       test: [ "CMD", "mysqladmin", "ping", "-uuser", "-ppwd", "-h", "localhost" ]
       interval: 10s
       timeout: 5s
       retries: 10
 
+  api-gateway-service:
+    build: ./api-gateway-service
+    container_name: api-gateway-service
+    ports:
+      - "8080:8080"
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+    depends_on:
+      suppliers-service:
+        condition: service_started
+      inventory-service:
+        condition: service_started
+      employee-service:
+        condition: service_started
+      sales-service:
+        condition: service_started
+
 volumes:
-  db_data:
+  suppliers_mongo_data:
+  inventory_mysql_data:
+  employee_pgdata:
+  sales_mysql_data:

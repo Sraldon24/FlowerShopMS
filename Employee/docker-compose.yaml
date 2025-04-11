@@ -16,19 +16,18 @@ services:
         condition: service_healthy
 
   employee-db:
-    image: mysql:8.0
+    image: postgres:16
     container_name: employee-db
     ports:
-      - "3309:3306"
+      - "5433:5432"  # Host:Container
     environment:
-      MYSQL_ROOT_PASSWORD: verysecretpwd
-      MYSQL_DATABASE: employee-db
-      MYSQL_USER: user
-      MYSQL_PASSWORD: pwd
+      POSTGRES_DB: employee-db
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: pwd
     volumes:
-      - db_data:/var/lib/mysql
+      - db_data:/var/lib/postgresql/data
     healthcheck:
-      test: [ "CMD", "mysqladmin", "ping", "-uuser", "-ppwd", "-h", "localhost" ]
+      test: ["CMD-SHELL", "pg_isready -U user"]
       interval: 10s
       timeout: 5s
       retries: 10

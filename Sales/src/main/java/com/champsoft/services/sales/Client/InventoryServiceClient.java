@@ -1,8 +1,4 @@
-/* =======================================
-   InventoryServiceClient.java
-   ======================================= */
 package com.champsoft.services.sales.Client;
-
 
 import com.champsoft.services.sales.PresentationLayer.inventorydtos.FlowerRequestModel;
 import com.champsoft.services.sales.PresentationLayer.inventorydtos.FlowerResponseModel;
@@ -27,13 +23,14 @@ public class InventoryServiceClient {
 
     private final RestTemplate restTemplate;
     private final ObjectMapper mapper;
+    private final String INVENTORY_SERVICE_BASE_URL;
 
-    @Value("${app.inventory-service.base-url}")
-    private String INVENTORY_SERVICE_BASE_URL;
-
-    public InventoryServiceClient(RestTemplate restTemplate, ObjectMapper mapper) {
+    public InventoryServiceClient(RestTemplate restTemplate,
+                                  ObjectMapper mapper,
+                                  @Value("${app.gateway.base-url}") String gatewayBaseUrl) {
         this.restTemplate = restTemplate;
         this.mapper = mapper;
+        this.INVENTORY_SERVICE_BASE_URL = gatewayBaseUrl + "/inventories"; // ✅ Fixed
     }
 
     public FlowerResponseModel getFlowerByFlowerId(String inventoryId, String flowerId) {
@@ -59,8 +56,7 @@ public class InventoryServiceClient {
             String message = mapper.readValue(ex.getResponseBodyAsString(), HttpErrorInfo.class).getMessage();
             if (ex.getStatusCode() == NOT_FOUND) return new NotFoundException(message);
             if (ex.getStatusCode() == UNPROCESSABLE_ENTITY) return new InvalidInputException(message);
-        } catch (IOException ignored) {
-        }
+        } catch (IOException ignored) {}
         return ex;
     }
 }

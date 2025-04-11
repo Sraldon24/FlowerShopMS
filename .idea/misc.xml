@@ -2,6 +2,7 @@
 <project version="4">
   <component name="ExternalStorageConfigurationManager" enabled="true" />
   <component name="FrameworkDetectionExcludesConfiguration">
+    <file type="web" url="file://$PROJECT_DIR$/api-gateway-service" />
     <file type="web" url="file://$PROJECT_DIR$/Employee" />
     <file type="web" url="file://$PROJECT_DIR$/Inventory" />
     <file type="web" url="file://$PROJECT_DIR$/Sales" />

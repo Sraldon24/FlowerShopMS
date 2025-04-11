@@ -1,0 +1,70 @@
+[
+  {
+    "supplierIdentifier": "sup-1234",
+    "companyName": "FloraWorld",
+    "contactPerson": "Alice Green",
+    "emailAddress": "alice@floraworld.com",
+    "username": "aliceg",
+    "password": "securepass",
+    "address": {
+      "streetAddress": "123 Bloom St",
+      "city": "Montreal",
+      "province": "Quebec",
+      "postalCode": "H1A 1A1"
+    },
+    "phoneNumbers": [
+      { "type": "MOBILE", "number": "514-123-4567" }
+    ]
+  },
+  {
+    "supplierIdentifier": "sup-5678",
+    "companyName": "Petal Paradise",
+    "contactPerson": "Bob Bloom",
+    "emailAddress": "bob@petalparadise.com",
+    "username": "bobb",
+    "password": "securepass",
+    "address": {
+      "streetAddress": "456 Rose Ave",
+      "city": "Toronto",
+      "province": "Ontario",
+      "postalCode": "M2B 2B2"
+    },
+    "phoneNumbers": [
+      { "type": "OFFICE", "number": "416-234-5678" }
+    ]
+  },
+  {
+    "supplierIdentifier": "sup-9999",
+    "companyName": "NoFlowers Supplier",
+    "contactPerson": "Charlie Green",
+    "emailAddress": "charlie@noflowers.com",
+    "username": "charlieg",
+    "password": "securepass",
+    "address": {
+      "streetAddress": "789 Leaf Rd",
+      "city": "Vancouver",
+      "province": "British Columbia",
+      "postalCode": "V3C 3C3"
+    },
+    "phoneNumbers": [
+      { "type": "WORK", "number": "604-555-7890" }
+    ]
+  },
+  {
+    "supplierIdentifier": "sup-DELETE-ME",
+    "companyName": "Unused Supplier",
+    "contactPerson": "Test Person",
+    "emailAddress": "test@unusedsupplier.com",
+    "username": "testuser",
+    "password": "testpass",
+    "address": {
+      "streetAddress": "999 Nowhere St",
+      "city": "Nowhere",
+      "province": "Nowhere Province",
+      "postalCode": "X0X 0X0"
+    },
+    "phoneNumbers": [
+      { "type": "MOBILE", "number": "000-000-0000" }
+    ]
+  }
+]

@@ -10,28 +10,20 @@ logging:
     org.hibernate.type.descriptor.sql.BasicBinder: TRACE
 
 ---
+
 spring:
   application:
     name: Suppliers
   config:
     activate:
       on-profile: docker
-  datasource:
-    url: jdbc:mysql://suppliers-db:3306/suppliers-db
-    username: user
-    password: pwd
-    driver-class-name: com.mysql.cj.jdbc.Driver
-  jpa:
-    hibernate:
-      ddl-auto: none
-    show-sql: true
-    properties:
-      hibernate:
-        format_sql: true
-        dialect: org.hibernate.dialect.MySQL8Dialect
-  sql:
-    init:
-      platform: mysql
-      mode: always
-      logging:
-        enabled: true
+
+  data:
+    mongodb:
+      host: suppliers-db
+      port: 27017
+      username: user
+      password: pwd
+      authentication-database: admin
+      database: suppliers-db
+      auto-index-creation: true
