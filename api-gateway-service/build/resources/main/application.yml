@@ -1,0 +1,30 @@
+server:
+  port: 8080
+  error:
+    include-message: always
+
+logging:
+  level:
+    root: INFO
+    com.champsoft: DEBUG
+
+spring:
+  application:
+    name: api-gateway
+  config:
+    activate:
+      on-profile: docker
+
+app:
+  suppliers-service:
+    host: suppliers-service
+    port: 8080
+  employee-service:
+    host: employee-service
+    port: 8080
+  inventory-service:
+    host: inventory-service
+    port: 8080
+  sales-service:
+    host: sales-service
+    port: 8080

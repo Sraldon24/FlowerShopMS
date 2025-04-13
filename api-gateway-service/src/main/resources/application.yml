@@ -1,0 +1,49 @@
+server:
+  port: 8080
+  error:
+    include-message: always
+
+logging:
+  level:
+    root: INFO
+    com.champsoft: DEBUG
+    org.springframework.cloud.gateway: DEBUG
+    reactor.netty.http.client: DEBUG
+
+spring:
+  application:
+    name: api-gateway
+  config:
+    activate:
+      on-profile: docker
+
+  cloud:
+    gateway:
+      default-filters:
+        - DedupeResponseHeader=Access-Control-Allow-Origin, RETAIN_UNIQUE
+      globalcors:
+        corsConfigurations:
+          '[/**]':
+            allowedOrigins: "*"
+            allowedMethods:
+              - GET
+              - POST
+              - PUT
+              - DELETE
+              - OPTIONS
+            allowedHeaders: "*"
+
+# Optional if you want to reference these values programmatically
+app:
+  suppliers-service:
+    host: suppliers-service
+    port: 8080
+  employee-service:
+    host: employee-service
+    port: 8080
+  inventory-service:
+    host: inventory-service
+    port: 8080
+  sales-service:
+    host: sales-service
+    port: 8080
