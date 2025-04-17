@@ -1,0 +1,29 @@
+server:
+  port: 8080
+  error:
+    include-message: always
+
+logging:
+  level:
+    root: INFO
+    org.springframework.web: DEBUG
+    org.hibernate.type.descriptor.sql.BasicBinder: TRACE
+
+---
+
+spring:
+  application:
+    name: Suppliers
+  config:
+    activate:
+      on-profile: docker
+
+  data:
+    mongodb:
+      host: suppliers-db
+      port: 27017
+      username: user
+      password: pwd
+      authentication-database: admin
+      database: suppliers-db
+      auto-index-creation: true
