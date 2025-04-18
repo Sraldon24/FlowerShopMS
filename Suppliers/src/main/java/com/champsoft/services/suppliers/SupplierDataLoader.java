@@ -14,24 +14,36 @@ import java.util.List;
 @Configuration
 public class SupplierDataLoader {
 
+    private InputStream overrideStream = null;
+
+    // For tests: allow override
+    public void setOverrideStream(InputStream stream) {
+        this.overrideStream = stream;
+    }
+
     @Bean
-    CommandLineRunner loadSuppliers(SupplierRepository supplierRepository) {
+    public CommandLineRunner loadSuppliers(SupplierRepository supplierRepository) {
         return args -> {
             ObjectMapper mapper = new ObjectMapper();
             TypeReference<List<Supplier>> typeRef = new TypeReference<>() {};
 
-            InputStream inputStream = getClass()
-                    .getResourceAsStream("/suppliers.json");
+            InputStream inputStream = (overrideStream != null)
+                    ? overrideStream
+                    : getClass().getResourceAsStream("/suppliers.json");
 
             if (inputStream != null) {
-                List<Supplier> suppliers = mapper.readValue(inputStream, typeRef);
-                suppliers.forEach(s -> {
-                    if (s.getSupplierIdentifier() == null || s.getSupplierIdentifier().isEmpty()) {
-                        s.setSupplierIdentifier(java.util.UUID.randomUUID().toString());
-                    }
-                });
-                supplierRepository.saveAll(suppliers);
-                System.out.println("✅ Loaded " + suppliers.size() + " suppliers from JSON.");
+                try {
+                    List<Supplier> suppliers = mapper.readValue(inputStream, typeRef);
+                    suppliers.forEach(s -> {
+                        if (s.getSupplierIdentifier() == null || s.getSupplierIdentifier().isEmpty()) {
+                            s.setSupplierIdentifier(java.util.UUID.randomUUID().toString());
+                        }
+                    });
+                    supplierRepository.saveAll(suppliers);
+                    System.out.println("✅ Loaded " + suppliers.size() + " suppliers from JSON.");
+                } catch (Exception e) {
+                    System.out.println("⚠️ Failed to load suppliers: " + e.getMessage());
+                }
             } else {
                 System.out.println("⚠️ suppliers.json not found!");
             }

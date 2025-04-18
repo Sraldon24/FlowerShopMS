@@ -1,6 +1,3 @@
-/* =====================
-   SupplierServiceImpl.java
-   ===================== */
 package com.champsoft.services.suppliers.BusinessLayer;
 
 import com.champsoft.services.suppliers.DataLayer.Supplier;
@@ -10,6 +7,7 @@ import com.champsoft.services.suppliers.Mapperlayer.SupplierResponseMapper;
 import com.champsoft.services.suppliers.PresentationLayer.SupplierRequestModel;
 import com.champsoft.services.suppliers.PresentationLayer.SupplierResponseModel;
 import com.champsoft.services.suppliers.utils.NotFoundException;
+import com.champsoft.services.suppliers.utils.InvalidInputException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -48,11 +46,11 @@ public class SupplierServiceImpl implements SupplierService {
     @Override
     public SupplierResponseModel addSupplier(SupplierRequestModel newSupplierData) {
         if (newSupplierData.getPassword1() == null || !newSupplierData.getPassword1().equals(newSupplierData.getPassword2())) {
-            throw new IllegalArgumentException("Entered passwords do not match!");
+            throw new InvalidInputException("Entered passwords do not match!");
         }
 
         if (supplierRepository.findSupplierBySupplierIdentifier(newSupplierData.getSupplierId()) != null) {
-            throw new IllegalArgumentException("Supplier with ID " + newSupplierData.getSupplierId() + " already exists. Choose another Supplier Identifier.");
+            throw new InvalidInputException("Supplier with ID " + newSupplierData.getSupplierId() + " already exists. Choose another Supplier Identifier.");
         }
 
         Supplier supplier = supplierRequestMapper.requestModelToEntity(newSupplierData);
@@ -70,7 +68,7 @@ public class SupplierServiceImpl implements SupplierService {
         }
 
         if (newSupplierData.getPassword1() == null || !newSupplierData.getPassword1().equals(newSupplierData.getPassword2())) {
-            throw new IllegalArgumentException("Entered passwords do not match!");
+            throw new InvalidInputException("Entered passwords do not match!");
         }
 
         Supplier updatedSupplier = supplierRequestMapper.requestModelToEntity(newSupplierData);

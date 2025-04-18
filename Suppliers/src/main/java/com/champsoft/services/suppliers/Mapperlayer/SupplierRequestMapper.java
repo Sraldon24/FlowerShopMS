@@ -23,7 +23,7 @@ public interface SupplierRequestMapper {
     @Mapping(target = "address.postalCode", source = "postalCode")
     @Mapping(target = "address.city", source = "city")
     @Mapping(target = "phoneNumbers", source = "phoneNumbers")
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "password", ignore = true)
     Supplier requestModelToEntity(SupplierRequestModel supplierRequestModel);
-
-    List<Supplier> requestModelListToEntityList(List<SupplierRequestModel> supplierRequestModels);
 }

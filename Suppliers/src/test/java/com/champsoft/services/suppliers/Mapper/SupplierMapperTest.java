@@ -50,18 +50,22 @@ public class SupplierMapperTest {
         supplier.setCompanyName("TestCo");
         supplier.setContactPerson("John Doe");
         supplier.setEmailAddress("john@test.com");
-        supplier.setAddress(new Address("123 Main St", "Montreal", "Quebec", "H2X 3T1"));
+
+        // ✅ Fixed parameter order: street, postalCode, city, province
+        supplier.setAddress(new Address("123 Main St", "H2X 3T1", "Montreal", "Quebec"));
+
         supplier.setPhoneNumbers(List.of(new SupplierPhoneNumber(PhoneType.MOBILE, "514-111-2222")));
 
         SupplierResponseModel response = responseMapper.entityToResponseModel(supplier);
 
         assertEquals("TestCo", response.getCompanyName());
-        assertEquals("Montreal", response.getCity());           // ✅ Fixed assertion
-        assertEquals("Quebec", response.getProvince());         // ✅ New assertion
+        assertEquals("Montreal", response.getCity());         // ✅ Corrected expected value
+        assertEquals("Quebec", response.getProvince());       // ✅ Stays the same
         assertEquals(1, response.getPhoneNumbers().size());
         assertEquals("MOBILE", response.getPhoneNumbers().get(0).getType());
         assertEquals("514-111-2222", response.getPhoneNumbers().get(0).getNumber());
     }
+
 
     @Test
     void testPhoneNumberToDto() {
@@ -71,5 +75,19 @@ public class SupplierMapperTest {
 
         assertEquals("WORK", dto.getType());
         assertEquals("123-456-7890", dto.getNumber());
+    }
+
+    @Test
+    void testEntityToResponseModel_withNullFields() {
+        Supplier supplier = new Supplier();
+        // all fields are left null
+        SupplierResponseModel response = responseMapper.entityToResponseModel(supplier);
+
+        assertNull(response.getCompanyName());
+        assertNull(response.getCity());
+        assertNull(response.getProvince());
+        assertNull(response.getStreetAddress());
+        assertNull(response.getPostalCode());
+        assertNull(response.getPhoneNumbers());
     }
 }
