@@ -7,9 +7,11 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -42,12 +44,21 @@ public class SupplierControllerTest {
 
     @Test
     void testGetAllSuppliers() {
+        // Mock data
         when(supplierService.getSuppliers()).thenReturn(Arrays.asList(responseSupplier));
 
-        ResponseEntity<List<SupplierResponseModel>> response = supplierController.getSuppliers();
+        // Call the updated method
+        ResponseEntity<CollectionModel<SupplierResponseModel>> response = supplierController.getSuppliers();
 
+        // Assertions
         assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertEquals(1, response.getBody().size());
+
+        CollectionModel<SupplierResponseModel> model = response.getBody();
+        assertNotNull(model);
+
+        List<SupplierResponseModel> content = new ArrayList<>(model.getContent());
+        assertEquals(1, content.size());
+        assertEquals("sup-0001", content.get(0).getSupplierId());
     }
 
     @Test

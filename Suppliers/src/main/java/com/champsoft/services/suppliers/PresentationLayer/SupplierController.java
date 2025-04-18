@@ -9,7 +9,13 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import org.springframework.hateoas.CollectionModel;
+import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
+
 import java.util.List;
+
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 @RestController
 @RequestMapping("/api/v1/suppliers")
@@ -23,9 +29,26 @@ public class SupplierController {
     }
 
     @GetMapping
-    public ResponseEntity<List<SupplierResponseModel>> getSuppliers() {
-        return ResponseEntity.ok().body(this.supplierService.getSuppliers());
+    public ResponseEntity<CollectionModel<SupplierResponseModel>> getSuppliers() {
+        List<SupplierResponseModel> suppliers = supplierService.getSuppliers();
+
+        for (SupplierResponseModel supplier : suppliers) {
+            String supplierId = supplier.getSupplierId();
+
+            supplier.add(linkTo(methodOn(SupplierController.class)
+                    .getSupplierBySupplierId(supplierId)).withRel("get-supplier"));
+
+            supplier.add(linkTo(methodOn(SupplierController.class)
+                    .deleteSupplierBySupplierId(supplierId)).withRel("delete-supplier"));
+        }
+
+        // Optional: Add a self link to the entire collection
+        CollectionModel<SupplierResponseModel> model = CollectionModel.of(suppliers,
+                linkTo(methodOn(SupplierController.class).getSuppliers()).withSelfRel());
+
+        return ResponseEntity.ok(model);
     }
+
 
     @GetMapping("/{supplierId}")
     public ResponseEntity<SupplierResponseModel> getSupplierBySupplierId(@PathVariable String supplierId) {
