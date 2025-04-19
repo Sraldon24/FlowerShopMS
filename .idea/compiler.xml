@@ -9,7 +9,7 @@
           <entry name="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.projectlombok/lombok/1.18.36/5a30490a6e14977d97d9c73c924c1f1b5311ea95/lombok-1.18.36.jar" />
           <entry name="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.mapstruct/mapstruct-processor/1.6.0/d48e787cbd31bfd8766cdcd255ca102e974309/mapstruct-processor-1.6.0.jar" />
         </processorPath>
-        <module name="Suppliers.main" />
+        <module name="Inventory.main" />
       </profile>
     </annotationProcessing>
   </component>

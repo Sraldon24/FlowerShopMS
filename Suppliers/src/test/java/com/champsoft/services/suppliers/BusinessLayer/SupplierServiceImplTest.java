@@ -7,7 +7,6 @@ import com.champsoft.services.suppliers.Mapperlayer.SupplierResponseMapper;
 import com.champsoft.services.suppliers.PresentationLayer.SupplierRequestModel;
 import com.champsoft.services.suppliers.PresentationLayer.SupplierResponseModel;
 import com.champsoft.services.suppliers.utils.NotFoundException;
-import com.champsoft.services.suppliers.utils.InvalidInputException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -93,13 +92,13 @@ public class SupplierServiceImplTest {
     @Test
     void testAddSupplier_passwordMismatch() {
         requestModel.setPassword2("wrongpass");
-        assertThrows(InvalidInputException.class, () -> supplierService.addSupplier(requestModel));
+        assertThrows(IllegalArgumentException.class, () -> supplierService.addSupplier(requestModel));
     }
 
     @Test
     void testAddSupplier_duplicateSupplier() {
         when(supplierRepository.findSupplierBySupplierIdentifier("sup-001")).thenReturn(supplierEntity);
-        assertThrows(InvalidInputException.class, () -> supplierService.addSupplier(requestModel));
+        assertThrows(IllegalArgumentException.class, () -> supplierService.addSupplier(requestModel));
     }
 
     @Test
@@ -123,7 +122,7 @@ public class SupplierServiceImplTest {
     void testUpdateSupplier_passwordMismatch() {
         when(supplierRepository.findSupplierBySupplierIdentifier("sup-001")).thenReturn(supplierEntity);
         requestModel.setPassword2("wrongpass");
-        assertThrows(InvalidInputException.class, () -> supplierService.updateSupplier("sup-001", requestModel));
+        assertThrows(IllegalArgumentException.class, () -> supplierService.updateSupplier("sup-001", requestModel));
     }
 
     @Test

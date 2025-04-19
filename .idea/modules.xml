@@ -5,6 +5,7 @@
       <module fileurl="file://$PROJECT_DIR$/FlowerShopMS.iml" filepath="$PROJECT_DIR$/FlowerShopMS.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/Inventory.main.iml" filepath="$PROJECT_DIR$/.idea/modules/Inventory.main.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/Sales.main.iml" filepath="$PROJECT_DIR$/.idea/modules/Sales.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/Sales.test.iml" filepath="$PROJECT_DIR$/.idea/modules/Sales.test.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/Suppliers.main.iml" filepath="$PROJECT_DIR$/.idea/modules/Suppliers.main.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/Suppliers.test.iml" filepath="$PROJECT_DIR$/.idea/modules/Suppliers.test.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/api-gateway-service.main.iml" filepath="$PROJECT_DIR$/.idea/modules/api-gateway-service.main.iml" />
