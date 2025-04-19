@@ -4,10 +4,14 @@
 package com.champsoft.services.inventory.PresentationLayer.Inventory;
 
 import com.champsoft.services.inventory.BusinessLayer.Inventory.InventoryService;
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 @RestController
 @RequestMapping("api/v1/inventories")
@@ -20,8 +24,13 @@ public class InventoryController {
     }
 
     @GetMapping
-    public ResponseEntity<List<InventoryResponseModel>> getInventories() {
-        return ResponseEntity.ok().body(inventoryService.getInventories());
+    public ResponseEntity<CollectionModel<InventoryResponseModel>> getInventories() {
+        List<InventoryResponseModel> inventoryList = inventoryService.getInventories();
+
+        return ResponseEntity.ok(
+                CollectionModel.of(inventoryList,
+                        linkTo(methodOn(InventoryController.class).getInventories()).withSelfRel())
+        );
     }
 
     @GetMapping("/{inventoryId}")

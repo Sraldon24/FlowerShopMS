@@ -7,12 +7,16 @@ import com.champsoft.services.inventory.DataLayer.Inventory.InventoryIdentifier;
 import com.champsoft.services.inventory.DataLayer.Inventory.InventoryRepository;
 import com.champsoft.services.inventory.MapperLayer.Inventory.InventoryRequestMapper;
 import com.champsoft.services.inventory.MapperLayer.Inventory.InventoryResponseMapper;
+import com.champsoft.services.inventory.PresentationLayer.Inventory.InventoryController;
 import com.champsoft.services.inventory.PresentationLayer.Inventory.InventoryRequestModel;
 import com.champsoft.services.inventory.PresentationLayer.Inventory.InventoryResponseModel;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.stream.Collectors;
+
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 @Service
 public class InventoryServiceImpl implements InventoryService {
@@ -36,8 +40,18 @@ public class InventoryServiceImpl implements InventoryService {
     @Override
     public List<InventoryResponseModel> getInventories() {
         List<Inventory> inventories = inventoryRepository.findAll();
+
         return inventories.stream()
-                .map(inventoryResponseMapper::entityToResponseModel)
+                .map(inventory -> {
+                    InventoryResponseModel model = inventoryResponseMapper.entityToResponseModel(inventory);
+                    String id = model.getInventoryId();
+
+                    // Add HATEOAS links: get by id and delete by id
+                    model.add(linkTo(methodOn(InventoryController.class).getInventoryById(id)).withRel("get-inventory-by-id"));
+                    model.add(linkTo(methodOn(InventoryController.class).deleteInventory(id)).withRel("delete-inventory-by-id"));
+
+                    return model;
+                })
                 .collect(Collectors.toList());
     }
 
