@@ -13,6 +13,10 @@ logging:
 spring:
   application:
     name: api-gateway
+
+---
+
+spring:
   config:
     activate:
       on-profile: docker
@@ -33,7 +37,7 @@ spring:
               - OPTIONS
             allowedHeaders: "*"
 
-# Optional if you want to reference these values programmatically
+# Microservice endpoints (Docker service names & internal ports)
 app:
   suppliers-service:
     host: suppliers-service

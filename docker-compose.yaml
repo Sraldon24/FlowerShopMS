@@ -12,6 +12,8 @@ services:
     depends_on:
       suppliers-db:
         condition: service_healthy
+    networks:
+      - backend
 
   suppliers-db:
     image: mongo:6.0
@@ -28,6 +30,8 @@ services:
       interval: 10s
       timeout: 5s
       retries: 10
+    networks:
+      - backend
 
   inventory-service:
     build: ./Inventory
@@ -39,6 +43,8 @@ services:
     depends_on:
       inventory-db:
         condition: service_healthy
+    networks:
+      - backend
 
   inventory-db:
     image: mysql:8.0
@@ -53,10 +59,12 @@ services:
     volumes:
       - inventory_mysql_data:/var/lib/mysql
     healthcheck:
-      test: [ "CMD", "mysqladmin", "ping", "-uuser", "-ppwd", "-h", "localhost" ]
+      test: ["CMD", "mysqladmin", "ping", "-uuser", "-ppwd", "-h", "localhost"]
       interval: 10s
       timeout: 5s
       retries: 10
+    networks:
+      - backend
 
   employee-service:
     build: ./Employee
@@ -68,6 +76,8 @@ services:
     depends_on:
       employee-db:
         condition: service_healthy
+    networks:
+      - backend
 
   employee-db:
     image: postgres:16
@@ -85,6 +95,8 @@ services:
       interval: 10s
       timeout: 5s
       retries: 10
+    networks:
+      - backend
 
   sales-service:
     build: ./Sales
@@ -96,6 +108,8 @@ services:
     depends_on:
       sales-db:
         condition: service_healthy
+    networks:
+      - backend
 
   sales-db:
     image: mysql:8.0
@@ -110,10 +124,12 @@ services:
     volumes:
       - sales_mysql_data:/var/lib/mysql
     healthcheck:
-      test: [ "CMD", "mysqladmin", "ping", "-uuser", "-ppwd", "-h", "localhost" ]
+      test: ["CMD", "mysqladmin", "ping", "-uuser", "-ppwd", "-h", "localhost"]
       interval: 10s
       timeout: 5s
       retries: 10
+    networks:
+      - backend
 
   api-gateway-service:
     build: ./api-gateway-service
@@ -131,9 +147,14 @@ services:
         condition: service_started
       sales-service:
         condition: service_started
+    networks:
+      - backend
 
 volumes:
   suppliers_mongo_data:
   inventory_mysql_data:
   employee_pgdata:
   sales_mysql_data:
+
+networks:
+  backend:

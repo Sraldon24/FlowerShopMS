@@ -7,6 +7,8 @@ logging:
   level:
     root: INFO
     com.champsoft: DEBUG
+    org.springframework.cloud.gateway: DEBUG
+    reactor.netty.http.client: DEBUG
 
 spring:
   application:
@@ -15,10 +17,27 @@ spring:
     activate:
       on-profile: docker
 
+  cloud:
+    gateway:
+      default-filters:
+        - DedupeResponseHeader=Access-Control-Allow-Origin, RETAIN_UNIQUE
+      globalcors:
+        corsConfigurations:
+          '[/**]':
+            allowedOrigins: "*"
+            allowedMethods:
+              - GET
+              - POST
+              - PUT
+              - DELETE
+              - OPTIONS
+            allowedHeaders: "*"
+
+# Local microservice endpoints for use in RestTemplate
 app:
   suppliers-service:
-    host: suppliers-service
-    port: 8080
+    host: localhost
+    port: 8081
   employee-service:
     host: employee-service
     port: 8080
