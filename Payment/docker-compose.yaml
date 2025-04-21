@@ -1,0 +1,38 @@
+version: '3.8'
+
+services:
+  payment-service:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8081:8081"
+    volumes:
+      - logs:/app/logs
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+    depends_on:
+      payment-db:
+        condition: service_healthy
+
+  payment-db:
+    image: postgres:16
+    container_name: payment-db
+    ports:
+      - "5434:5432"  # Host:Container
+    environment:
+      POSTGRES_DB: payment-db
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: pwd
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    healthcheck:
+      # ✅ Updated to check the correct database
+      test: ["CMD-SHELL", "pg_isready -U user -d payment-db"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+volumes:
+  logs:
+  db_data:

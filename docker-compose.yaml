@@ -115,6 +115,34 @@ services:
       timeout: 5s
       retries: 10
 
+  payment-service:
+    build: ./Payment
+    container_name: payment-service
+    ports:
+      - "8085:8080"
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+    depends_on:
+      payment-db:
+        condition: service_healthy
+
+  payment-db:
+    image: postgres:16
+    container_name: payment-db
+    ports:
+      - "5434:5432"
+    environment:
+      POSTGRES_DB: payment-db
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: pwd
+    volumes:
+      - payment_pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U user -d payment-db"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
   api-gateway-service:
     build: ./api-gateway-service
     container_name: api-gateway-service
@@ -131,9 +159,12 @@ services:
         condition: service_started
       sales-service:
         condition: service_started
+      payment-service:
+        condition: service_started
 
 volumes:
   suppliers_mongo_data:
   inventory_mysql_data:
   employee_pgdata:
   sales_mysql_data:
+  payment_pgdata:
