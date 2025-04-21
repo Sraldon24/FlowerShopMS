@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.hateoas.RepresentationModel;
 
 import java.time.ZonedDateTime;
 
@@ -12,7 +13,7 @@ import java.time.ZonedDateTime;
 @AllArgsConstructor
 @Getter
 @Setter
-public class PaymentResponseModel {
+public class PaymentResponseModel extends RepresentationModel<PaymentResponseModel> {
     private String paymentIdentifier;
     private Double amount;
     private String method;

@@ -4,10 +4,14 @@ package com.champsoft.services.payment.PresentationLayer;
 import com.champsoft.services.payment.BusniessLayer.PaymentService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 @Slf4j
 @RestController
@@ -21,10 +25,23 @@ public class PaymentController {
         this.paymentService = paymentService;
     }
 
-    @GetMapping()
-    public ResponseEntity<List<PaymentResponseModel>> getAllPayments() {
+    @GetMapping
+    public ResponseEntity<CollectionModel<PaymentResponseModel>> getAllPayments() {
         log.info("Fetching all payments");
-        return ResponseEntity.ok(paymentService.getAllPayments());
+        List<PaymentResponseModel> payments = paymentService.getAllPayments();
+
+        payments.forEach(payment -> {
+            payment.add(linkTo(methodOn(PaymentController.class)
+                    .getPaymentById(payment.getPaymentIdentifier())).withRel("get-by-id"));
+
+            payment.add(linkTo(methodOn(PaymentController.class)
+                    .deletePayment(payment.getPaymentIdentifier())).withRel("delete"));
+        });
+
+        return ResponseEntity.ok(
+                CollectionModel.of(payments,
+                        linkTo(methodOn(PaymentController.class).getAllPayments()).withSelfRel())
+        );
     }
 
     @GetMapping("/{paymentIdentifier}")
