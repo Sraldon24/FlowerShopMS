@@ -13,6 +13,9 @@ logging:
 spring:
   application:
     name: api-gateway
+
+---
+spring:
   config:
     activate:
       on-profile: docker
@@ -33,11 +36,11 @@ spring:
               - OPTIONS
             allowedHeaders: "*"
 
-# Local microservice endpoints for use in RestTemplate
+# Microservice endpoints (Docker service names & internal ports)
 app:
   suppliers-service:
-    host: localhost
-    port: 8081
+    host: suppliers-service
+    port: 8080
   employee-service:
     host: employee-service
     port: 8080
@@ -46,4 +49,7 @@ app:
     port: 8080
   sales-service:
     host: sales-service
+    port: 8080
+  payment-service:
+    host: payment-service
     port: 8080

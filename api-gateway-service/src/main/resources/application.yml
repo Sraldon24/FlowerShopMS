@@ -3,16 +3,19 @@ server:
   error:
     include-message: always
 
+spring:
+  main:
+    web-application-type: reactive  # ✅ Fix: prevents Spring MVC conflict
+
+  application:
+    name: api-gateway
+
 logging:
   level:
     root: INFO
     com.champsoft: DEBUG
     org.springframework.cloud.gateway: DEBUG
     reactor.netty.http.client: DEBUG
-
-spring:
-  application:
-    name: api-gateway
 
 ---
 
@@ -50,4 +53,7 @@ app:
     port: 8080
   sales-service:
     host: sales-service
+    port: 8080
+  payment-service:
+    host: payment-service
     port: 8080

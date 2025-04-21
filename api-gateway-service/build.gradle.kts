@@ -1,6 +1,6 @@
 plugins {
     id("java")
-    id("org.springframework.boot") version "3.3.3" // ✅ Downgraded from 3.4.4
+    id("org.springframework.boot") version "3.3.3" // ✅ Spring Boot version
     id("io.spring.dependency-management") version "1.1.7"
     id("io.freefair.lombok") version "8.4" // ✅ Lombok plugin
 }
@@ -28,6 +28,7 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-webflux") // ✅ Reactive Web
     implementation("org.springframework.cloud:spring-cloud-starter-gateway") // ✅ Spring Cloud Gateway
     implementation("org.springframework.boot:spring-boot-starter-actuator")
+    implementation("org.springframework.boot:spring-boot-starter-hateoas") // ✅ Added for RepresentationModel
     implementation("com.fasterxml.jackson.core:jackson-databind")
 
     // ✅ Lombok support
