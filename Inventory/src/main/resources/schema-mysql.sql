@@ -1,14 +1,31 @@
-drop table IF EXISTS inventories;
-create TABLE inventories (
+-- ===================================
+-- DISABLE FK CHECKS TO AVOID CONFLICTS
+-- ===================================
+SET FOREIGN_KEY_CHECKS = 0;
+
+-- DROP tables in reverse dependency order
+DROP TABLE IF EXISTS flower_options;
+DROP TABLE IF EXISTS flowers;
+DROP TABLE IF EXISTS inventories;
+
+-- ===================================
+-- ENABLE FK CHECKS AGAIN
+-- ===================================
+SET FOREIGN_KEY_CHECKS = 1;
+
+-- ===================================
+-- CREATE INVENTORIES TABLE
+-- ===================================
+CREATE TABLE inventories (
                              id INT AUTO_INCREMENT PRIMARY KEY,
                              inventory_identifier VARCHAR(36) NOT NULL UNIQUE,
                              type VARCHAR(50)
 );
 
--- CREATE FLOWERS TABLE(part of the inventory)
-
-drop table IF EXISTS flowers;
-create TABLE flowers (
+-- ===================================
+-- CREATE FLOWERS TABLE
+-- ===================================
+CREATE TABLE flowers (
                          id INT AUTO_INCREMENT PRIMARY KEY,
                          flower_identifier VARCHAR(36) NOT NULL UNIQUE,
                          inventory_id VARCHAR(36) NOT NULL,
@@ -23,10 +40,10 @@ create TABLE flowers (
                          FOREIGN KEY (inventory_id) REFERENCES inventories(inventory_identifier)
 );
 
--- Flower additional options(part of the inventory)
-
-drop table IF EXISTS flower_options;
-create TABLE flower_options (
+-- ===================================
+-- CREATE FLOWER OPTIONS TABLE
+-- ===================================
+CREATE TABLE flower_options (
                                 id INT AUTO_INCREMENT PRIMARY KEY,
                                 flower_id INT NOT NULL,
                                 option_name VARCHAR(50),
@@ -34,5 +51,3 @@ create TABLE flower_options (
                                 option_price DECIMAL(10,2),
                                 FOREIGN KEY (flower_id) REFERENCES flowers(id)
 );
-
--- CREATE SALES TABLE
