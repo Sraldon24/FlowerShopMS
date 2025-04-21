@@ -6,7 +6,7 @@ services:
       context: .
       dockerfile: Dockerfile
     ports:
-      - "8085:8085"
+      - "8080:8080"
     volumes:
       - logs:/app/logs
     environment:
@@ -19,7 +19,7 @@ services:
     image: postgres:16
     container_name: payment-db
     ports:
-      - "5434:5432"  # Host:Container
+      - "5434:5432"
     environment:
       POSTGRES_DB: payment-db
       POSTGRES_USER: user
@@ -27,7 +27,6 @@ services:
     volumes:
       - db_data:/var/lib/postgresql/data
     healthcheck:
-      # ✅ Updated to check the correct database
       test: ["CMD-SHELL", "pg_isready -U user -d payment-db"]
       interval: 10s
       timeout: 5s
