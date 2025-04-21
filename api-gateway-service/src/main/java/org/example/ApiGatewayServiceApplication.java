@@ -8,7 +8,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.web.client.RestTemplate;
 
 @SpringBootApplication
-@EnableConfigurationProperties(ServiceProperties.class) // ✅ Enable binding of service config
 public class ApiGatewayServiceApplication {
 
     public static void main(String[] args) {
