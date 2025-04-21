@@ -1,0 +1,43 @@
+
+server:
+  port: 8081
+  error:
+    include-message: always
+
+logging:
+  level:
+    root: INFO
+    org.springframework.web: DEBUG
+    org.hibernate.type.descriptor.sql.BasicBinder: TRACE
+
+---
+spring:
+  application:
+    name: Payment
+  config:
+    activate:
+      on-profile: docker
+
+  datasource:
+    url: jdbc:postgresql://payment-db:5432/payment-db
+    username: user
+    password: pwd
+    driver-class-name: org.postgresql.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: none
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+
+  sql:
+    init:
+      platform: postgres
+      mode: always
+      schema-locations: classpath:schema-postgres.sql
+      data-locations: classpath:data-postgres.sql
+      logging:
+        enabled: true

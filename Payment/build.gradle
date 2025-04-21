@@ -1,0 +1,61 @@
+plugins {
+    id 'java'
+    id 'org.springframework.boot' version '3.4.4'
+    id 'io.spring.dependency-management' version '1.1.7'
+    id 'jacoco' // ✅ Add Jacoco plugin
+}
+
+group = 'com.champsoft.services'
+version = '0.0.1-SNAPSHOT'
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(17)
+    }
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    runtimeOnly 'org.postgresql:postgresql:42.7.2'
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    implementation 'org.springframework.boot:spring-boot-starter-hateoas'
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+
+    runtimeOnly 'com.mysql:mysql-connector-j'
+    runtimeOnly 'com.h2database:h2'
+
+    compileOnly 'org.projectlombok:lombok'
+    annotationProcessor 'org.projectlombok:lombok'
+
+    implementation 'org.mapstruct:mapstruct:1.6.0'
+    annotationProcessor 'org.mapstruct:mapstruct-processor:1.6.0'
+
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    implementation 'mysql:mysql-connector-java:8.0.33'
+}
+
+bootJar {
+    archiveFileName = 'app.jar'
+}
+
+tasks.named('test') {
+    useJUnitPlatform()
+    finalizedBy jacocoTestReport // ✅ Generate Jacoco report after tests
+}
+
+jacoco {
+    toolVersion = "0.8.11" // ✅ You can upgrade this if needed
+}
+
+jacocoTestReport {
+    dependsOn test
+    reports {
+        xml.required = true
+        html.required = true
+        csv.required = false
+        html.outputLocation = layout.buildDirectory.dir('jacocoHtml')
+    }
+}
