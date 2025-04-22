@@ -3,6 +3,13 @@ server:
   error:
     include-message: always
 
+spring:
+  main:
+    web-application-type: reactive  # ✅ Fix: prevents Spring MVC conflict
+
+  application:
+    name: api-gateway
+
 logging:
   level:
     root: INFO
@@ -10,11 +17,8 @@ logging:
     org.springframework.cloud.gateway: DEBUG
     reactor.netty.http.client: DEBUG
 
-spring:
-  application:
-    name: api-gateway
-
 ---
+
 spring:
   config:
     activate:
