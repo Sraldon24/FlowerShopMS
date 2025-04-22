@@ -1,0 +1,277 @@
+@startuml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Context.puml
+' uncomment the following line and comment the first to use locally
+' !include C4_Context.puml
+
+LAYOUT_WITH_LEGEND()
+title System Context diagram for Flower E-shop System
+
+Person(customer, "Flower E-shop Customer", "A customer of the flower e-shop with a personal account.")
+System(flower_eshop_system, "Flower E-shop System", "Allows customers to view information about past orders and in progress orders. Also allows customers to create new purchase orders for flowers.")
+System_Ext(mail_system, "E-mail system", "The internal Microsoft Exchange e-mail system.")
+System_Ext(mainframe, "Mainframe Flower E-shop System", "Stores all of the core account information about customers,\norders, transactions, etc.")
+System_Ext(payment_system, "Payment System", "This external system processes transactions with credit cards, paypal, etc. and generates a receipt for the customer.")
+
+Rel(customer, flower_eshop_system, "Views account\nbalances, and\nmakes payments\nusing")
+Rel_Back(customer, mail_system, "Sends e-mails to")
+Rel_Neighbor(flower_eshop_system, mail_system, "Sends e-mail\nusing", "SMTP")
+Rel(flower_eshop_system, mainframe, "Gets account\ninformation from,\nand makes\npayments using")
+Rel(flower_eshop_system, payment_system, "Sends order and payment info\nusing", "HTTPS")
+Rel_Back(mail_system, payment_system, "Sends payment confirmation and \nreceipt using", "HTTPS")
+
+@enduml
+
+@startuml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Container.puml
+' uncomment the following line and comment the first to use locally
+' !include C4_Container.puml
+
+LAYOUT_WITH_LEGEND()
+title Container Diagram for Internet Banking System
+
+Person(customer, "Flower E-shop Customer", "A customer of the flower e-shop with a personal account.")
+
+System_Boundary(flower_eshop_system, "Flower E-shop System") {
+  Container(web_app, "Web Application", "Delivers the static content and the flower eshop single page application.")
+  Container(single_page_app, "Single-Page Application", "Provides all of the flower eshop functionalities to customers via their web browser.")
+  Container(api_application, "API Application", "Provides flower eshop functionalities via a JSON/HTTPS API.")
+  ContainerDb(database, "Database", "Stores user registration information, hashed authentication credentials, access logs, etc.")
+}
+
+System_Ext(mail_system, "E-mail system", "The internal Microsoft Exchange e-mail system.")
+System_Ext(mainframe, "Mainframe Flower E-shop System", "Stores all of the core account information about customers,\norders, transactions, etc.")
+System_Ext(payment_system, "Payment System", "This external system processes transactions with credit cards, paypal, etc. and generates a receipt for the customer.")
+
+
+Rel(customer, web_app, "Visits flowereshop.com using", "HTTPS")
+Rel(customer, single_page_app, "Views account\n details,and \nmakes orders \nusing")
+Rel(web_app, single_page_app, "Delivers to the\ncustomer's web\nbrowser")
+Rel(single_page_app, api_application, "Makes API calls to", "JSON/HTTPS")
+
+Rel(api_application, database, "Reads from and\nwrites to", "JDBC")
+Rel(api_application, mainframe, "Makes API calls to", "SOAP/HTTPS")
+Rel(api_application, mail_system, "Sends e-mail\nusing", "SMTP")
+Rel_Back(customer, mail_system, "Sends e-mails to")
+Rel(api_application, payment_system, "Sends order and payment information using", "HTTPS")
+Rel_Back(mail_system, payment_system, "Sends payment confirmation and \nreceipt using", "HTTPS")
+
+@enduml
+
+
+
+
+@startuml
+hide circle
+top to bottom direction
+
+!define ENTITY(entityName) class entityName << Entity >>
+!define AGGREGATE(aggregateName) class aggregateName << Aggregate >>
+!define AGGREGATE_ROOT(aggregateRootName) class aggregateRootName << Aggregate Root >>
+!define AGGREGATE_ROOT_ENTITY(aggregateRootEntityName) class aggregateRootEntityName << Aggregate Root >> << Entity >>
+!define VALUE_OBJECT(valueObjectName) class valueObjectName << Value Object >>
+!pragma useVerticalIf on
+skinparam dpi 350
+skinparam packageStyle rectangle
+skinparam rectangle {
+    BackgroundColor #f7f4eb
+    BorderColor Black
+}
+
+Package "Flower Store e-shop" <<Rectangle>> #lightgreen {
+
+
+    Package "Sales Aggregate Sub-Domain" <<Rectangle>> #FFC0CB {
+        AGGREGATE_ROOT_ENTITY(PurchaseOrder) #lightpink {
+         id : Integer
+         purchaseId : String
+         purchaseOrderIdentifier : PurchaseOrderIdentifier
+         salePurchaseStatus : PurchaseStatus
+         financingAgreementDetails : FinancingAgreementDetails
+         customerIdentifier : CustomerIdentifier
+         supplierIdentifier: SupplierIdentifier
+         employeeIdentifier: EmployeeIdentifier
+         flowerIdentifier : FlowerIdentifier
+         inventoryIdentifier: InventoryIdentifier
+         saleOfferDate : LocalDate
+        price :Price
+        }
+
+        VALUE_OBJECT(PurchaseOrderIdentifier) #Bisque {
+purchaseOrderIdentifier : String
+        }
+         VALUE_OBJECT(InventoryIdentifier) #Bisque {
+inventoryIdentifier : String
+                }
+                 VALUE_OBJECT(CustomerIdentifier) #Bisque {
+customerIdentifier : String
+                        }
+                         VALUE_OBJECT(FlowerIdentifier) #Bisque {
+flowerIdentifier : String
+                                }
+  VALUE_OBJECT(EmployeeIdentifier) #Bisque {
+employeeIdentifier : String
+                                                                }
+                VALUE_OBJECT(SupplierIdentifier) #Bisque {
+              supplierIdentifier : String
+                                              }
+        VALUE_OBJECT(PurchaseStatus) #Bisque {
+{PENDING, COMPLETED, CANCELLED} : ENUM
+        }
+        VALUE_OBJECT(FinancingAgreementDetails) #Bisque {
+numberOfMonthlyPayments : Integer
+monthlyPaymentAmount : Double
+downPaymentAmount : Double
+                }
+
+        VALUE_OBJECT(DiscountCode) #Bisque {
+            code: String
+            percentage: Decimal
+            expirationDate: DateTime
+        }
+
+        PurchaseOrder o-- "0..1" DiscountCode
+        PurchaseOrder o-- "1" FinancingAgreementDetails
+        PurchaseOrder o-- "1" CustomerIdentifier
+        PurchaseOrder o-- "1" SupplierIdentifier
+        PurchaseOrder o-- "1" EmployeeIdentifier
+        PurchaseOrder o-- "1" FlowerIdentifier
+        PurchaseOrder o-- "1" InventoryIdentifier
+        PurchaseOrder o-- "1" PurchaseOrderIdentifier
+        PurchaseOrder o-- "1" PurchaseStatus
+    }
+
+    Package "Payment Processing Sub-Domain" <<Rectangle>> #FFD700 {
+
+        ENTITY(Payment) #lightyellow {
+        id :Integer
+        paymentIdentifier : String
+            timestamp: ZoneDateTime
+            amount: Double
+            method: PaymentMethod
+            status: PaymentStatus
+            transactionRef : String
+        }
+
+        VALUE_OBJECT(PaymentDetail) #Bisque {
+            invoiceNumber: String
+            paymentStatus: String
+        }
+        VALUE_OBJECT(PaymentStatus) #Bisque {
+                    {PENDING, COMPLETED, FAILED, REFUNDED} : ENUM
+                }
+                VALUE_OBJECT(PaymentMethod) #Bisque {
+                            {CREDIT_CARD, PAYPAL, DEBIT_CARD, CASH, OTHER} : ENUM
+                        }
+        Payment o-- "1" PaymentDetail
+        Payment o-- "1    " PaymentStatus
+        Payment o-- "1" PaymentMethod
+        PurchaseOrder -- Payment
+    }
+
+
+
+
+    Package "Flower Inventory Sub-Domain" <<Rectangle>> #FFA07A {
+
+        ENTITY(Flower) #lightcoral {
+            id: Integer
+            flowerName: String
+            flowerCategory: String
+            flowerColor: String
+            stockQuantity: Integer
+            supplierIdentifier: String
+            status : Status
+            usageType : UsageType
+            currency : Currency
+            price : Price
+            options : List<Option>
+            flowerIdentifier : FlowerIdentifier
+            inventoryIdentifier : InventoryIdentifier
+
+        }
+
+        ENTITY(Inventory) #lightcoral {
+            id: Integer
+            type: String
+        }
+
+        VALUE_OBJECT(FlowerIdentifier) #Bisque {
+            flowerNumber: String
+        }
+
+         VALUE_OBJECT(Option) #Bisque {
+                    name : String
+                    description: String
+                    price : BigDecimal
+                }
+         VALUE_OBJECT(Price) #Bisque {
+                    amount : BigDecimal
+                    currency: Currency
+                }
+         VALUE_OBJECT(Currency) #Bisque {
+                            flowerId: Integer
+         }
+VALUE_OBJECT(InventoryIdentifier) #Bisque {
+            inventoryId: Integer
+        }
+
+        VALUE_OBJECT(Status) #Bisque {
+           {AVAILABLE, OUT_OF_STOCK, SOLD} : ENUM
+        }
+
+        VALUE_OBJECT(UsageType) #Bisque {
+            {NEW, USED} : ENUM
+        }
+
+        Flower o-- "1" Status
+        Flower o-- "1" UsageType
+        Flower o-- "1" Currency
+        Flower o-- "1" Price
+        Flower o-- "1" Option
+        Flower o-- "1" FlowerIdentifier
+
+        Inventory o-- "1" InventoryIdentifier
+PurchaseOrder o-- "1" Flower
+
+    }
+
+
+
+
+        Package "Suppliers Sub-Domain" <<Rectangle>> #blue {
+
+                   ENTITY(Supplier) #lightblue {
+                   id : string
+                   supplierIdentifier: String
+                   companyName: String
+                     contactPerson: String
+                     emailAddress: String
+                     username: String
+                     password: String
+
+                     address : Address
+                        phoneNumber: List<SupplierPhoneNumber>
+                    }
+
+
+                VALUE_OBJECT(PhoneType) #Bisque {
+                            {MOBILE,HOME,OFFICE,WORK} : ENUM
+                        }
+                VALUE_OBJECT(SupplierPhoneNumber) #Bisque {
+                            number: String
+                           type: PhoneType
+                        }
+                VALUE_OBJECT(Address) #Bisque {
+                            streetAddress: String
+                            city: String
+                            province: String
+                            postalCode: String
+                        }
+                 PurchaseOrder o-- "1..*    " Supplier
+                    Supplier o-- "1" Address
+                    Supplier o-- "1" SupplierPhoneNumber
+                    SupplierPhoneNumber o-- "1" PhoneType
+                }
+
+}
+@enduml
