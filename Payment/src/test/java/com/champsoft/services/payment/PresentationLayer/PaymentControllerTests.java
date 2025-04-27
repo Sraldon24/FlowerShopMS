@@ -9,6 +9,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.ResponseEntity;
 
 import java.time.ZonedDateTime;
@@ -52,12 +53,13 @@ class PaymentControllerTests {
     void testGetAllPayments() {
         when(paymentService.getAllPayments()).thenReturn(List.of(sampleResponse));
 
-        ResponseEntity<List<PaymentResponseModel>> response = paymentController.getAllPayments();
+        ResponseEntity<CollectionModel<PaymentResponseModel>> response = paymentController.getAllPayments();
 
         assertEquals(200, response.getStatusCodeValue());
-        assertEquals(1, response.getBody().size());
+        assertEquals(1, response.getBody().getContent().size());
         verify(paymentService).getAllPayments();
     }
+
 
     @Test
     void testGetPaymentById() {

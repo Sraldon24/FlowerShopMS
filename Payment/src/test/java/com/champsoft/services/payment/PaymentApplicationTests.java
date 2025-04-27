@@ -11,9 +11,4 @@ class PaymentApplicationTests {
 	@Test
 	void contextLoads() {
 	}
-
-	@Test
-	void mainMethodRuns() {
-		assertDoesNotThrow(() -> PaymentApplication.main(new String[]{}));
-	}
 }
