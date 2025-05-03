@@ -49,11 +49,11 @@ public class SupplierServiceImpl implements SupplierService {
             throw new InvalidInputException("Entered passwords do not match!");
         }
 
-        if (supplierRepository.findSupplierBySupplierIdentifier(newSupplierData.getSupplierId()) != null) {
-            throw new InvalidInputException("Supplier with ID " + newSupplierData.getSupplierId() + " already exists. Choose another Supplier Identifier.");
-        }
-
         Supplier supplier = supplierRequestMapper.requestModelToEntity(newSupplierData);
+
+        // ✅ Generate a supplierIdentifier if missing
+        supplier.generateIdentifierIfMissing();
+
         supplier.setPassword(newSupplierData.getPassword1());
 
         Supplier savedSupplier = supplierRepository.save(supplier);

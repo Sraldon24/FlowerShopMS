@@ -3,7 +3,9 @@ package org.example.Suppliers.PresentationLayer;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.example.Suppliers.BusinessLayer.SupplierServiceImpl;
+import org.example.Suppliers.DomainClientLayer.SupplierServiceClient;
 import org.example.Suppliers.Utils.InvalidInputException;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,6 +18,7 @@ import java.util.List;
 public class SupplierController {
 
     private final SupplierServiceImpl supplierService;
+    private final SupplierServiceClient supplierServiceClient;
     private static final int UUID_SIZE = 36;
 
     @GetMapping
@@ -30,7 +33,8 @@ public class SupplierController {
 
     @PostMapping
     public ResponseEntity<SupplierResponseModel> addSupplier(@RequestBody SupplierRequestModel newSupplierData) {
-        return ResponseEntity.status(201).body(supplierService.addSupplier(newSupplierData));
+        SupplierResponseModel responseModel = supplierServiceClient.addSupplier(newSupplierData);
+        return ResponseEntity.status(HttpStatus.CREATED).body(responseModel);
     }
 
     @PutMapping("/{supplierId}")
