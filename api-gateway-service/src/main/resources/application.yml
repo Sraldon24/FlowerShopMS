@@ -10,20 +10,6 @@ spring:
   application:
     name: api-gateway
 
-logging:
-  level:
-    root: INFO
-    com.champsoft: DEBUG
-    org.springframework.cloud.gateway: DEBUG
-    reactor.netty.http.client: DEBUG
-
----
-
-spring:
-  config:
-    activate:
-      on-profile: docker
-
   cloud:
     gateway:
       default-filters:
@@ -39,8 +25,71 @@ spring:
               - DELETE
               - OPTIONS
             allowedHeaders: "*"
+      routes:
+        - id: suppliers-service
+          uri: http://suppliers-service:8080
+          predicates:
+            - Path=/api/v1/suppliers/**
+          methods:
+            - GET
+            - POST
+            - PUT
+            - DELETE
 
-# Microservice endpoints (Docker service names & internal ports)
+        - id: employee-service
+          uri: http://employee-service:8080
+          predicates:
+            - Path=/api/v1/employees/**
+          methods:
+            - GET
+            - POST
+            - PUT
+            - DELETE
+
+        - id: inventory-service
+          uri: http://inventory-service:8080
+          predicates:
+            - Path=/api/v1/inventories/**
+          methods:
+            - GET
+            - POST
+            - PUT
+            - DELETE
+
+        - id: sales-service
+          uri: http://sales-service:8080
+          predicates:
+            - Path=/api/v1/sales/**
+          methods:
+            - GET
+            - POST
+            - PUT
+            - DELETE
+
+        - id: payment-service
+          uri: http://payment-service:8080
+          predicates:
+            - Path=/api/v1/payments/**
+          methods:
+            - GET
+            - POST
+            - PUT
+            - DELETE
+
+logging:
+  level:
+    root: INFO
+    com.champsoft: DEBUG
+    org.springframework.cloud.gateway: DEBUG
+    reactor.netty.http.client: DEBUG
+
+---
+
+spring:
+  config:
+    activate:
+      on-profile: docker
+
 app:
   suppliers-service:
     host: suppliers-service

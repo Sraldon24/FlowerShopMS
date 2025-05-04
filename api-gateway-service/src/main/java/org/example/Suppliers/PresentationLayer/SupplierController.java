@@ -19,7 +19,6 @@ public class SupplierController {
 
     private final SupplierServiceImpl supplierService;
     private final SupplierServiceClient supplierServiceClient;
-    private static final int UUID_SIZE = 36;
 
     @GetMapping
     public ResponseEntity<List<SupplierResponseModel>> getSuppliers() {
@@ -40,9 +39,6 @@ public class SupplierController {
     @PutMapping("/{supplierId}")
     public ResponseEntity<SupplierResponseModel> updateSupplier(@PathVariable String supplierId,
                                                                 @RequestBody SupplierRequestModel newSupplierData) {
-        if (supplierId.length() != UUID_SIZE)
-            throw new InvalidInputException("Invalid supplier ID");
-
         return ResponseEntity.ok(supplierService.updateSupplier(supplierId, newSupplierData));
     }
 

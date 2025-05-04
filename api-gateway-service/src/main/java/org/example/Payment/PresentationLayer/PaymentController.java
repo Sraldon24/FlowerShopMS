@@ -17,7 +17,7 @@ import java.util.List;
 public class PaymentController {
 
     private final PaymentServiceImpl paymentService;
-    private static final int UUID_SIZE = 36;
+
 
     @GetMapping
     public ResponseEntity<List<PaymentResponseModel>> getPayments() {
@@ -37,8 +37,6 @@ public class PaymentController {
     @PutMapping("/{paymentId}")
     public ResponseEntity<PaymentResponseModel> updatePayment(@PathVariable String paymentId,
                                                               @RequestBody PaymentRequestModel newPaymentData) {
-        if (paymentId.length() != UUID_SIZE)
-            throw new InvalidInputException("Invalid payment ID");
 
         return ResponseEntity.ok(paymentService.updatePayment(paymentId, newPaymentData));
     }
