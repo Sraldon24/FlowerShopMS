@@ -10,12 +10,16 @@ import com.champsoft.services.inventory.DataLayer.Flowers.FlowersIdentifier;
 import com.champsoft.services.inventory.DataLayer.Inventory.InventoryIdentifier;
 import com.champsoft.services.inventory.MapperLayer.Flower.FlowerRequestMapper;
 import com.champsoft.services.inventory.MapperLayer.Flower.FlowerResponseMapper;
+import com.champsoft.services.inventory.PresentationLayer.Flower.FlowerController;
 import com.champsoft.services.inventory.PresentationLayer.Flower.FlowerRequestModel;
 import com.champsoft.services.inventory.PresentationLayer.Flower.FlowerResponseModel;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.stream.Collectors;
+
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 @Service
 public class FlowerServiceImpl implements FlowerService {
@@ -43,6 +47,12 @@ public class FlowerServiceImpl implements FlowerService {
                 .map(flower -> {
                     FlowerResponseModel response = flowerResponseMapper.entityToResponseModel(flower);
                     response.setSupplier(suppliersServiceClient.getSupplierBySupplierId(flower.getSupplierIdentifier()));
+
+                    // Add HATEOAS links
+                    String flowerId = response.getFlowerId();
+                    response.add(linkTo(methodOn(FlowerController.class).getFlowerById(flowerId)).withRel("get-by-id"));
+                    response.add(linkTo(methodOn(FlowerController.class).deleteFlower(flowerId)).withRel("delete"));
+
                     return response;
                 })
                 .collect(Collectors.toList());

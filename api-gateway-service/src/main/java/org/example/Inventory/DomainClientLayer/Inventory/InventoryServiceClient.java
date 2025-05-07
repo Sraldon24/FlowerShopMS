@@ -1,10 +1,10 @@
-package org.example.Inventory.DomainClientLayer;
+package org.example.Inventory.DomainClientLayer.Inventory;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
-import org.example.Inventory.PresentationLayer.InventoryHateoasWrapper;
-import org.example.Inventory.PresentationLayer.InventoryRequestModel;
-import org.example.Inventory.PresentationLayer.InventoryResponseModel;
+import org.example.Inventory.PresentationLayer.Inventory.InventoryHateoasWrapper;
+import org.example.Inventory.PresentationLayer.Inventory.InventoryRequestModel;
+import org.example.Inventory.PresentationLayer.Inventory.InventoryResponseModel;
 import org.example.Payment.Utils.HttpErrorInfo;
 import org.example.Payment.Utils.InvalidInputException;
 import org.example.Payment.Utils.NotFoundException;

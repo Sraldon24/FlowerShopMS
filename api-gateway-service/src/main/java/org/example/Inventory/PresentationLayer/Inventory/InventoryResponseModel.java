@@ -1,4 +1,4 @@
-package org.example.Inventory.PresentationLayer;
+package org.example.Inventory.PresentationLayer.Inventory;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

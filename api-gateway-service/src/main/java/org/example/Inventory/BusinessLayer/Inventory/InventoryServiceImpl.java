@@ -1,11 +1,11 @@
-package org.example.Inventory.BusinessLayer;
+package org.example.Inventory.BusinessLayer.Inventory;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.example.Inventory.DomainClientLayer.InventoryServiceClient;
-import org.example.Inventory.PresentationLayer.InventoryController;
-import org.example.Inventory.PresentationLayer.InventoryRequestModel;
-import org.example.Inventory.PresentationLayer.InventoryResponseModel;
+import org.example.Inventory.DomainClientLayer.Inventory.InventoryServiceClient;
+import org.example.Inventory.PresentationLayer.Inventory.InventoryController;
+import org.example.Inventory.PresentationLayer.Inventory.InventoryRequestModel;
+import org.example.Inventory.PresentationLayer.Inventory.InventoryResponseModel;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

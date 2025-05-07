@@ -11,6 +11,27 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Map;
 
+import com.champsoft.services.inventory.BusinessLayer.Flower.FlowerService;
+import org.springframework.hateoas.CollectionModel;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
+
+import com.champsoft.services.inventory.BusinessLayer.Flower.FlowerService;
+import org.springframework.hateoas.CollectionModel;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
+
 @RestController
 @RequestMapping("/api/v1/flowers")
 public class FlowerController {
@@ -22,13 +43,18 @@ public class FlowerController {
     }
 
     @GetMapping
-    public ResponseEntity<List<FlowerResponseModel>> getFlowersWithFilter(@RequestParam Map<String, String> queryParams) {
-        return ResponseEntity.ok().body(flowerService.getAllFlowers());
+    public ResponseEntity<CollectionModel<FlowerResponseModel>> getAllFlowers() {
+        List<FlowerResponseModel> flowers = flowerService.getAllFlowers();
+
+        return ResponseEntity.ok(
+                CollectionModel.of(flowers,
+                        linkTo(methodOn(FlowerController.class).getAllFlowers()).withSelfRel())
+        );
     }
 
     @GetMapping("/{flowerId}")
     public ResponseEntity<FlowerResponseModel> getFlowerById(@PathVariable String flowerId) {
-        return ResponseEntity.ok().body(flowerService.getFlowerById(flowerId));
+        return ResponseEntity.ok(flowerService.getFlowerById(flowerId));
     }
 
     @PostMapping

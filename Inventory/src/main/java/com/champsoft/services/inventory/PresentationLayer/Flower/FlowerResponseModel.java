@@ -8,6 +8,7 @@ import com.champsoft.services.inventory.PresentationLayer.supplierdtos.SupplierR
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.hateoas.RepresentationModel;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -15,7 +16,7 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class FlowerResponseModel {
+public class FlowerResponseModel extends RepresentationModel<FlowerResponseModel> {
     private String flowerId; // This maps to flower_identifier in the database
     private String inventoryId; // Matches inventory_id
     private String flowerName; // Matches flower_name

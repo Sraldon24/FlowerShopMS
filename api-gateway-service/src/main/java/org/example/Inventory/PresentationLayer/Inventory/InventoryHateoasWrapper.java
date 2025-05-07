@@ -1,4 +1,4 @@
-package org.example.Inventory.PresentationLayer;
+package org.example.Inventory.PresentationLayer.Inventory;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
