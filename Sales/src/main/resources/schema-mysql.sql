@@ -12,7 +12,8 @@ create TABLE sales (
                        supplier_id VARCHAR(36),
                        employee_id VARCHAR(36),
                        inventory_id VARCHAR(36),
-                       flower_id VARCHAR(36)
+                       flower_id VARCHAR(36),
+                       payment_id VARCHAR(36)
 
                        -- Foreign keys removed to avoid cross-service FK issues
 --                       ,FOREIGN KEY (supplier_id) REFERENCES suppliers(supplier_identifier),

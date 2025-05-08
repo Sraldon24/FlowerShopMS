@@ -5,11 +5,9 @@ package com.champsoft.services.sales.BusinessLayer;
 
 import com.champsoft.services.sales.Client.EmployeesServiceClient;
 import com.champsoft.services.sales.Client.InventoryServiceClient;
+import com.champsoft.services.sales.Client.PaymentsServiceClient;
 import com.champsoft.services.sales.Client.SuppliersServiceClient;
-import com.champsoft.services.sales.DataLayer.Identifiers.EmployeeIdentifier;
-import com.champsoft.services.sales.DataLayer.Identifiers.FlowerIdentifier;
-import com.champsoft.services.sales.DataLayer.Identifiers.InventoryIdentifier;
-import com.champsoft.services.sales.DataLayer.Identifiers.SupplierIdentifier;
+import com.champsoft.services.sales.DataLayer.Identifiers.*;
 import com.champsoft.services.sales.DataLayer.Purchase.*;
 import com.champsoft.services.sales.MapperLayer.PurchaseOrderRequestModelMapper;
 import com.champsoft.services.sales.MapperLayer.PurchaseOrderResponseModelMapper;
@@ -17,12 +15,13 @@ import com.champsoft.services.sales.PresentationLayer.PurchaseRequestModel;
 import com.champsoft.services.sales.PresentationLayer.PurchaseResponseModel;
 import com.champsoft.services.sales.utils.Currency;
 import com.champsoft.services.sales.utils.NotFoundException;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.stream.Collectors;
-
+@Slf4j
 @Service
 public class PurchaseOrderServiceImpl implements PurchaseOrderService {
 
@@ -33,6 +32,7 @@ public class PurchaseOrderServiceImpl implements PurchaseOrderService {
     private final SuppliersServiceClient suppliersServiceClient;
     private final EmployeesServiceClient employeesServiceClient;
     private final InventoryServiceClient inventoryServiceClient;
+    private final PaymentsServiceClient paymentsServiceClient;
 
     public PurchaseOrderServiceImpl(
             PurchaseOrderRepository purchaseOrderRepository,
@@ -40,7 +40,8 @@ public class PurchaseOrderServiceImpl implements PurchaseOrderService {
             PurchaseOrderResponseModelMapper responseModelMapper,
             SuppliersServiceClient suppliersServiceClient,
             EmployeesServiceClient employeesServiceClient,
-            InventoryServiceClient inventoryServiceClient
+            InventoryServiceClient inventoryServiceClient,
+            PaymentsServiceClient paymentsServiceClient // ✅ ADD THIS
     ) {
         this.purchaseOrderRepository = purchaseOrderRepository;
         this.requestModelMapper = requestModelMapper;
@@ -48,15 +49,33 @@ public class PurchaseOrderServiceImpl implements PurchaseOrderService {
         this.suppliersServiceClient = suppliersServiceClient;
         this.employeesServiceClient = employeesServiceClient;
         this.inventoryServiceClient = inventoryServiceClient;
+        this.paymentsServiceClient = paymentsServiceClient; // ✅ ADD THIS
     }
+
 
     @Override
     public List<PurchaseResponseModel> getAllPurchaseOrders() {
         List<PurchaseOrder> purchaseOrders = purchaseOrderRepository.findAll();
         return purchaseOrders.stream()
-                .map(responseModelMapper::entityToResponseModel)
+                .map(order -> {
+                    var response = responseModelMapper.entityToResponseModel(order);
+
+                    // 🔥 Enrich with payment details
+                    if (response.getPaymentId() != null) {
+                        try {
+                            var payment = paymentsServiceClient.getPaymentById(response.getPaymentId());
+                            response.setPaymentDetails(payment);
+                        } catch (Exception ex) {
+                            log.warn("Failed to fetch payment for {}: {}", response.getPaymentId(), ex.getMessage());
+                            response.setPaymentDetails(null);
+                        }
+                    }
+
+                    return response;
+                })
                 .collect(Collectors.toList());
     }
+
 
     @Override
     public PurchaseResponseModel getPurchaseOrderById(String purchaseId) {
@@ -67,8 +86,22 @@ public class PurchaseOrderServiceImpl implements PurchaseOrderService {
             throw new NotFoundException("Purchase Order with ID " + purchaseId + " not found.");
         }
 
-        return responseModelMapper.entityToResponseModel(purchaseOrder);
+        var response = responseModelMapper.entityToResponseModel(purchaseOrder);
+
+        // 🔥 Enrich with payment details
+        if (response.getPaymentId() != null) {
+            try {
+                var payment = paymentsServiceClient.getPaymentById(response.getPaymentId());
+                response.setPaymentDetails(payment);
+            } catch (Exception ex) {
+                log.warn("Failed to fetch payment for {}: {}", response.getPaymentId(), ex.getMessage());
+                response.setPaymentDetails(null);
+            }
+        }
+
+        return response;
     }
+
 
     @Override
     public PurchaseResponseModel addPurchaseOrder(PurchaseRequestModel requestModel) {
@@ -91,6 +124,12 @@ public class PurchaseOrderServiceImpl implements PurchaseOrderService {
                     "Flower " + requestModel.getFlowerIdentificationNumber() +
                             " is not found in inventory " + requestModel.getInventoryId()
             );
+        }
+        if (requestModel.getPaymentId() != null) {
+            var payment = paymentsServiceClient.getPaymentById(requestModel.getPaymentId());
+            if (payment == null) {
+                throw new NotFoundException("Unknown payment ID: " + requestModel.getPaymentId());
+            }
         }
 
         PurchaseOrder purchaseOrder = requestModelMapper.requestModelToEntity(requestModel);
@@ -132,6 +171,10 @@ public class PurchaseOrderServiceImpl implements PurchaseOrderService {
         if (requestModel.getFlowerIdentificationNumber() != null) {
             existingOrder.setFlowerIdentifier(new FlowerIdentifier(requestModel.getFlowerIdentificationNumber()));
         }
+        if (requestModel.getPaymentId() != null) {
+            existingOrder.setPaymentIdentifier(new PaymentIdentifier(requestModel.getPaymentId()));
+        }
+
 
         if (requestModel.getSupplierId() != null) {
             existingOrder.setSupplierIdentifier(new SupplierIdentifier(requestModel.getSupplierId()));
