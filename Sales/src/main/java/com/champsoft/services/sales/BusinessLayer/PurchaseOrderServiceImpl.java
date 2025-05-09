@@ -56,25 +56,34 @@ public class PurchaseOrderServiceImpl implements PurchaseOrderService {
     @Override
     public List<PurchaseResponseModel> getAllPurchaseOrders() {
         List<PurchaseOrder> purchaseOrders = purchaseOrderRepository.findAll();
+        log.info("Retrieved {} purchase orders from the database.", purchaseOrders.size());
+
         return purchaseOrders.stream()
                 .map(order -> {
                     var response = responseModelMapper.entityToResponseModel(order);
+                    log.info("Mapped PurchaseOrder {} to PurchaseResponseModel with paymentId {}",
+                            order.getPurchaseOrderIdentifier().getPurchaseId(), response.getPaymentId());
 
-                    // 🔥 Enrich with payment details
                     if (response.getPaymentId() != null) {
                         try {
+                            log.info("Fetching payment details for ID: {}", response.getPaymentId());
                             var payment = paymentsServiceClient.getPaymentById(response.getPaymentId());
+                            log.info("Successfully fetched payment details for ID: {}", response.getPaymentId());
                             response.setPaymentDetails(payment);
                         } catch (Exception ex) {
-                            log.warn("Failed to fetch payment for {}: {}", response.getPaymentId(), ex.getMessage());
+                            log.error("Failed to fetch payment for {}: {}", response.getPaymentId(), ex.getMessage());
                             response.setPaymentDetails(null);
                         }
+                    } else {
+                        log.warn("No paymentId found for purchaseOrderId: {}",
+                                order.getPurchaseOrderIdentifier().getPurchaseId());
                     }
 
                     return response;
                 })
                 .collect(Collectors.toList());
     }
+
 
 
     @Override

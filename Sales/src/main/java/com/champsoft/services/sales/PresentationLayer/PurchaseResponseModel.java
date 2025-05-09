@@ -20,9 +20,14 @@ public class PurchaseResponseModel {
 
     private String purchaseOrderId;
     private String inventoryId;
-    private String flowerIdentificationNumber; // formerly vehicleIdentificationNumber
-    private String supplierId;                 // formerly customerId
+
+    private String flowerIdentificationNumber;// formerly vehicleIdentificationNumber
+
+    private String supplierId;
+    // formerly customerId
     private String employeeId;
+
+
     private String paymentId;                        // ✅ ADD
     private PaymentResponseModel paymentDetails;   // ✅ ADD (optional enrichment)
 

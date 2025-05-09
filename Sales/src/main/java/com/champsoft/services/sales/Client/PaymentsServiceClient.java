@@ -6,38 +6,39 @@ import com.champsoft.services.sales.utils.InvalidInputException;
 import com.champsoft.services.sales.utils.NotFoundException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
 import java.io.IOException;
-import java.util.UUID;
 
 import static org.springframework.http.HttpStatus.NOT_FOUND;
 import static org.springframework.http.HttpStatus.UNPROCESSABLE_ENTITY;
 
-@Slf4j
+import org.springframework.beans.factory.annotation.Value;
+
 @Component
+@Slf4j
 public class PaymentsServiceClient {
 
     private final RestTemplate restTemplate;
     private final ObjectMapper mapper;
-    private final String PAYMENT_SERVICE_BASE_URL;
+    private final String baseUrl;
 
     public PaymentsServiceClient(RestTemplate restTemplate,
                                  ObjectMapper mapper,
-                                 @Value("${app.gateway.base-url}") String gatewayBaseUrl) {
+                                 @Value("${payment-service.base-url}") String baseUrl) {
         this.restTemplate = restTemplate;
         this.mapper = mapper;
-        this.PAYMENT_SERVICE_BASE_URL = gatewayBaseUrl + "/payments";
+        this.baseUrl = baseUrl;
     }
 
     public PaymentResponseModel getPaymentById(String paymentId) {
         try {
             return restTemplate.getForObject(
-                    PAYMENT_SERVICE_BASE_URL + "/" + paymentId,
-                    PaymentResponseModel.class);
+                    baseUrl + "/" + paymentId,
+                    PaymentResponseModel.class
+            );
         } catch (HttpClientErrorException ex) {
             throw handleHttpClientException(ex);
         }

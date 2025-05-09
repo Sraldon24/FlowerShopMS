@@ -45,15 +45,15 @@ public class PurchaseOrderResponseModelMapper {
                 ? po.getPaymentIdentifier().getPaymentId()
                 : null);
 
-        /* ─── NEW: paymentDetails ──────────────────────── */
-        if (po.getPaymentIdentifier() != null && po.getPaymentIdentifier().getPaymentId() != null) {
-            try {
-                m.setPaymentDetails(paymentsServiceClient.getPaymentById(
-                        po.getPaymentIdentifier().getPaymentId()));
-            } catch (Exception e) {
-                m.setPaymentDetails(null); // fail safe
-            }
-        }
+//        /* ─── NEW: paymentDetails ──────────────────────── */
+//        if (po.getPaymentIdentifier() != null && po.getPaymentIdentifier().getPaymentId() != null) {
+//            try {
+//                m.setPaymentDetails(paymentsServiceClient.getPaymentById(
+//                        po.getPaymentIdentifier().getPaymentId()));
+//            } catch (Exception e) {
+//                m.setPaymentDetails(null); // fail safe
+//            }
+//        }
 
         /* price & misc */
         m.setSalePrice(po.getPrice() != null ? po.getPrice().getAmount() : null);
