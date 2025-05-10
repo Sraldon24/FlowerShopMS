@@ -1,10 +1,11 @@
-package org.example.Inventory.DomainClientLayer;
+package org.example.Inventory.DomainClientLayer.Flower;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
-import org.example.Inventory.PresentationLayer.InventoryHateoasWrapper;
-import org.example.Inventory.PresentationLayer.InventoryRequestModel;
-import org.example.Inventory.PresentationLayer.InventoryResponseModel;
+
+import org.example.Inventory.PresentationLayer.Flower.FlowerHateoasWrapper;
+import org.example.Inventory.PresentationLayer.Flower.FlowerRequestModel;
+import org.example.Inventory.PresentationLayer.Flower.FlowerResponseModel;
 import org.example.Payment.Utils.HttpErrorInfo;
 import org.example.Payment.Utils.InvalidInputException;
 import org.example.Payment.Utils.NotFoundException;
@@ -21,64 +22,64 @@ import static org.springframework.http.HttpStatus.UNPROCESSABLE_ENTITY;
 
 @Slf4j
 @Component
-public class InventoryServiceClient {
+public class FlowerServiceClient {
 
     private final RestTemplate restTemplate;
     private final ObjectMapper mapper;
-    private final String INVENTORY_BASE_URL;
+    private final String FLOWER_BASE_URL;
 
-    public InventoryServiceClient(RestTemplate restTemplate,
-                                  ObjectMapper mapper,
-                                  @Value("${app.inventory-service.host}") String host,
-                                  @Value("${app.inventory-service.port}") String port) {
+    public FlowerServiceClient(RestTemplate restTemplate,
+                               ObjectMapper mapper,
+                               @Value("${app.inventory-service.host}") String host,
+                               @Value("${app.inventory-service.port}") String port) {
         this.restTemplate = restTemplate;
         this.mapper = mapper;
-        this.INVENTORY_BASE_URL = "http://" + host + ":" + port + "/api/v1/inventories";
+        this.FLOWER_BASE_URL = "http://" + host + ":" + port + "/api/v1/flowers";
     }
 
-    public List<InventoryResponseModel> getInventories() {
+    public List<FlowerResponseModel> getFlowers() {
         try {
-            InventoryHateoasWrapper response = restTemplate.getForObject(
-                    INVENTORY_BASE_URL,
-                    InventoryHateoasWrapper.class
+            FlowerHateoasWrapper response = restTemplate.getForObject(
+                    FLOWER_BASE_URL,
+                    FlowerHateoasWrapper.class
             );
             return response != null && response.getEmbedded() != null
-                    ? response.getEmbedded().getInventoryList()
+                    ? response.getEmbedded().getFlowerResponseModelList()
                     : List.of();
         } catch (HttpClientErrorException ex) {
             throw handleHttpClientException(ex);
         }
     }
 
-    public InventoryResponseModel getInventoryById(String id) {
+    public FlowerResponseModel getFlowerById(String flowerId) {
         try {
-            return restTemplate.getForObject(INVENTORY_BASE_URL + "/" + id, InventoryResponseModel.class);
+            return restTemplate.getForObject(FLOWER_BASE_URL + "/" + flowerId, FlowerResponseModel.class);
         } catch (HttpClientErrorException ex) {
             throw handleHttpClientException(ex);
         }
     }
 
-    public InventoryResponseModel addInventory(InventoryRequestModel requestModel) {
+    public FlowerResponseModel addFlower(FlowerRequestModel requestModel) {
         try {
-            return restTemplate.postForObject(INVENTORY_BASE_URL, requestModel, InventoryResponseModel.class);
+            return restTemplate.postForObject(FLOWER_BASE_URL, requestModel, FlowerResponseModel.class);
         } catch (HttpClientErrorException ex) {
             throw handleHttpClientException(ex);
         }
     }
 
-    public InventoryResponseModel updateInventory(String id, InventoryRequestModel requestModel) {
+    public FlowerResponseModel updateFlower(String flowerId, FlowerRequestModel requestModel) {
         try {
-            restTemplate.put(INVENTORY_BASE_URL + "/" + id, requestModel);
-            return getInventoryById(id);
+            restTemplate.put(FLOWER_BASE_URL + "/" + flowerId, requestModel);
+            return getFlowerById(flowerId);
         } catch (HttpClientErrorException ex) {
             throw handleHttpClientException(ex);
         }
     }
 
-    public String deleteInventory(String id) {
+    public String deleteFlower(String flowerId) {
         try {
-            restTemplate.delete(INVENTORY_BASE_URL + "/" + id);
-            return "Inventory deleted successfully.";
+            restTemplate.delete(FLOWER_BASE_URL + "/" + flowerId);
+            return "Flower deleted successfully.";
         } catch (HttpClientErrorException ex) {
             throw handleHttpClientException(ex);
         }

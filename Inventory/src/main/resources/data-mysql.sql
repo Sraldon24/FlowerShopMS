@@ -12,9 +12,7 @@ insert into flowers (flower_identifier, inventory_id, flower_name, flower_color,
                                                                                                                                                                                 ('flw-3001', 'inv-2001', 'Red Rose', 'Red', 'Roses', 'AVAILABLE', 100, 5.99, 'CAD', 'sup-1234'),
                                                                                                                                                                                 ('flw-3002', 'inv-2001', 'White Lily', 'White', 'Lilies', 'AVAILABLE', 50, 7.99, 'CAD', 'sup-5678'),
                                                                                                                                                                                 ('flw-3003', 'inv-2002', 'Tulip', 'Yellow', 'Tulips', 'AVAILABLE', 80, 4.50, 'CAD', 'sup-9999'),
-                                                                                                                                                                                ('flw-DELETE-ME', 'inv-2001', 'Test Flower', 'Blue', 'Test Category', 'AVAILABLE', 1, 1.99, 'CAD', 'sup-9999'); -- ✅ Deletable Flower
-
--- ===================================
+                                                                                                                                                                                ('flw-DELETE-ME', 'inv-2001', 'Test Flower', 'Blue', 'Test Category', 'AVAILABLE', 1, 1.99, 'CAD', 'sup-DELETE-ME'); -- ✅ Deletable Flower with unique supplier
 -- INSERT FLOWER OPTIONS(part of the inventory)
 -- ===================================
 

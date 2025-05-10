@@ -1,4 +1,4 @@
-package org.example.Inventory.PresentationLayer;
+package org.example.Inventory.PresentationLayer.Flower;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
@@ -10,7 +10,8 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class InventoryHateoasWrapper {
+public class FlowerHateoasWrapper {
+
     @JsonProperty("_embedded")
     private Embedded embedded;
 
@@ -18,7 +19,7 @@ public class InventoryHateoasWrapper {
     @NoArgsConstructor
     @AllArgsConstructor
     public static class Embedded {
-        @JsonProperty("inventoryResponseModelList") // must match backend
-        private List<InventoryResponseModel> inventoryList;
+        @JsonProperty("flowerResponseModelList") // MUST match microservice response
+        private List<FlowerResponseModel> flowerResponseModelList;
     }
 }
