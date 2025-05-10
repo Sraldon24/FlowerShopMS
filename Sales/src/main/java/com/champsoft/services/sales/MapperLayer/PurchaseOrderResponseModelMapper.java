@@ -1,50 +1,76 @@
 package com.champsoft.services.sales.MapperLayer;
 
+import com.champsoft.services.sales.Client.PaymentsServiceClient;
 import com.champsoft.services.sales.DataLayer.Purchase.PurchaseOrder;
 import com.champsoft.services.sales.PresentationLayer.PurchaseResponseModel;
-import org.mapstruct.Mapper;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
-@Mapper(componentModel = "spring")
-public interface PurchaseOrderResponseModelMapper {
+@Component
+public class PurchaseOrderResponseModelMapper {
 
-    default PurchaseResponseModel entityToResponseModel(PurchaseOrder purchaseOrder) {
-        if (purchaseOrder == null) return null;
+    @Autowired
+    private PaymentsServiceClient paymentsServiceClient;
 
-        PurchaseResponseModel model = new PurchaseResponseModel();
+    public PurchaseResponseModel entityToResponseModel(PurchaseOrder po) {
+        if (po == null) return null;
 
-        model.setPurchaseOrderId(purchaseOrder.getPurchaseOrderIdentifier() != null
-                ? purchaseOrder.getPurchaseOrderIdentifier().getPurchaseId()
+        PurchaseResponseModel m = new PurchaseResponseModel();
+
+        m.setPurchaseOrderId(po.getPurchaseOrderIdentifier() != null
+                ? po.getPurchaseOrderIdentifier().getPurchaseId()
                 : null);
 
-        model.setInventoryId(purchaseOrder.getInventoryIdentifier() != null
-                ? purchaseOrder.getInventoryIdentifier().getInventoryId()
+        m.setInventoryId(po.getInventoryIdentifier() != null
+                ? po.getInventoryIdentifier().getInventoryId()
                 : null);
 
-        model.setFlowerIdentificationNumber(purchaseOrder.getFlowerIdentifier() != null
-                ? purchaseOrder.getFlowerIdentifier().getFlowerNumber()
+        m.setFlowerIdentificationNumber(po.getFlowerIdentifier() != null
+                ? po.getFlowerIdentifier().getFlowerNumber()
                 : null);
 
-        model.setSupplierId(purchaseOrder.getSupplierIdentifier() != null
-                ? purchaseOrder.getSupplierIdentifier().getSupplierId()
+        m.setSupplierId(po.getSupplierIdentifier() != null
+                ? po.getSupplierIdentifier().getSupplierId()
                 : null);
 
-        model.setEmployeeId(purchaseOrder.getEmployeeIdentifier() != null
-                ? purchaseOrder.getEmployeeIdentifier().getEmployeeId()
+        m.setEmployeeId(po.getEmployeeIdentifier() != null
+                ? po.getEmployeeIdentifier().getEmployeeId()
                 : null);
 
-        model.setSalePrice(purchaseOrder.getPrice() != null ? purchaseOrder.getPrice().getAmount() : null);
-        model.setCurrency(purchaseOrder.getPrice() != null && purchaseOrder.getPrice().getCurrency() != null
-                ? purchaseOrder.getPrice().getCurrency().toString()
+        /* ─── NEW: paymentId ───────────────────────────── */
+        m.setPaymentId(po.getPaymentIdentifier() != null
+                ? po.getPaymentIdentifier().getPaymentId()
                 : null);
 
-        model.setSaleOfferDate(purchaseOrder.getSaleOfferDate());
-        model.setSalePurchaseStatus(purchaseOrder.getSalePurchaseStatus());
-        model.setFinancingAgreementDetails(purchaseOrder.getFinancingAgreementDetails());
+//        /* ─── NEW: paymentDetails ──────────────────────── */
+//        if (po.getPaymentIdentifier() != null && po.getPaymentIdentifier().getPaymentId() != null) {
+//            try {
+//                m.setPaymentDetails(paymentsServiceClient.getPaymentById(
+//                        po.getPaymentIdentifier().getPaymentId()));
+//            } catch (Exception e) {
+//                m.setPaymentDetails(null); // fail safe
+//            }
+//        }
 
-        return model;
+        /* price & misc */
+        m.setSalePrice(po.getPrice() != null ? po.getPrice().getAmount() : null);
+        m.setCurrency(po.getPrice() != null && po.getPrice().getCurrency() != null
+                ? po.getPrice().getCurrency().toString()
+                : null);
+
+        m.setSaleOfferDate(po.getSaleOfferDate());
+        m.setSalePurchaseStatus(po.getSalePurchaseStatus());
+        m.setFinancingAgreementDetails(po.getFinancingAgreementDetails());
+
+        return m;
     }
 
-    List<PurchaseResponseModel> entityToResponseModelList(List<PurchaseOrder> purchaseOrders);
+    public List<PurchaseResponseModel> entityToResponseModelList(List<PurchaseOrder> entities) {
+        return entities != null
+                ? entities.stream().map(this::entityToResponseModel).collect(Collectors.toList())
+                : null;
+    }
 }

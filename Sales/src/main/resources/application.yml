@@ -1,3 +1,4 @@
+# Default profile (for local development)
 server:
   port: 8080
   error:
@@ -9,7 +10,13 @@ logging:
     org.springframework.web: DEBUG
     org.hibernate.type.descriptor.sql.BasicBinder: TRACE
 
+app:
+  gateway:
+    base-url: http://localhost:8080/api/v1
+
 ---
+
+# Docker profile (used in containers)
 spring:
   application:
     name: Sales
@@ -30,7 +37,7 @@ spring:
     properties:
       hibernate:
         format_sql: true
-        dialect: org.hibernate.dialect.MySQL8Dialect
+        dialect: org.hibernate.dialect.MySQLDialect
 
   sql:
     init:
@@ -38,7 +45,13 @@ spring:
       mode: always
       logging:
         enabled: true
-
+# MOH !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+# ✅ Each service gets its own direct base URL inside Docker
+# when making api gateway make sure to update the clients @Value to @Value("${app.gateway.base-url}")
 app:
-  gateway:
-    base-url: http://api-gateway:8080/api/v1
+  payment:
+    base-url: http://payment-service:8080/api/v1
+  supplier:
+    base-url: http://suppliers-service:8080/api/v1
+  inventory:
+    base-url: http://inventory-service:8080/api/v1

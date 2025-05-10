@@ -5,6 +5,7 @@ import com.champsoft.services.sales.DataLayer.Purchase.PurchaseStatus;
 import lombok.*;
 
 import java.time.LocalDate;
+import java.util.UUID;
 
 @Data
 @Builder
@@ -19,6 +20,8 @@ public class PurchaseRequestModel {
     private String flowerIdentificationNumber; // was "vehicleIdentificationNumber"
     private String supplierId;                 // was "customerId"
     private String employeeId;
+    private String paymentId; // ✅ ADD THIS
+
 
     // Pricing
     private Double salePrice;

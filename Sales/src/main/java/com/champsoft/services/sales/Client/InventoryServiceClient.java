@@ -2,6 +2,7 @@ package com.champsoft.services.sales.Client;
 
 import com.champsoft.services.sales.PresentationLayer.inventorydtos.FlowerRequestModel;
 import com.champsoft.services.sales.PresentationLayer.inventorydtos.FlowerResponseModel;
+import com.champsoft.services.sales.PresentationLayer.inventorydtos.InventoryResponseModel;
 import com.champsoft.services.sales.utils.HttpErrorInfo;
 import com.champsoft.services.sales.utils.InvalidInputException;
 import com.champsoft.services.sales.utils.NotFoundException;
@@ -27,11 +28,20 @@ public class InventoryServiceClient {
 
     public InventoryServiceClient(RestTemplate restTemplate,
                                   ObjectMapper mapper,
-                                  @Value("${app.gateway.base-url}") String gatewayBaseUrl) {
+                                  @Value("${app.inventory.base-url}") String gatewayBaseUrl) {
         this.restTemplate = restTemplate;
         this.mapper = mapper;
         this.INVENTORY_SERVICE_BASE_URL = gatewayBaseUrl + "/inventories"; // ✅ Fixed
     }
+    public InventoryResponseModel getInventoryById(String inventoryId) {
+        String url = INVENTORY_SERVICE_BASE_URL + "/" + inventoryId;
+        try {
+            return restTemplate.getForObject(url, InventoryResponseModel.class);
+        } catch (HttpClientErrorException ex) {
+            throw handleHttpClientException(ex);
+        }
+    }
+
 
     public FlowerResponseModel getFlowerByFlowerId(String inventoryId, String flowerId) {
         String url = INVENTORY_SERVICE_BASE_URL + "/" + inventoryId + "/flowers/" + flowerId;

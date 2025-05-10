@@ -2,30 +2,27 @@ package com.champsoft.services.sales.MapperLayer;
 
 import com.champsoft.services.sales.DataLayer.Purchase.PurchaseOrder;
 import com.champsoft.services.sales.PresentationLayer.PurchaseRequestModel;
-import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
+import org.mapstruct.*;
 
-@Mapper(componentModel = "spring")
+@Mapper(componentModel = "spring",
+        unmappedSourcePolicy = ReportingPolicy.IGNORE)
 public interface PurchaseOrderRequestModelMapper {
 
-    @Mapping(target = "id", ignore = true) // ID is auto-generated
+    @Mapping(target = "id", ignore = true)
 
-    // Flower references
-    @Mapping(target = "flowerIdentifier.flowerNumber", source = "flowerIdentificationNumber")
+    // ─── Embedded identifiers ──────────────────────────────────────────
+    @Mapping(target = "flowerIdentifier.flowerNumber",   source = "flowerIdentificationNumber")
     @Mapping(target = "inventoryIdentifier.inventoryId", source = "inventoryId")
+    @Mapping(target = "supplierIdentifier.supplierId",   source = "supplierId")
+    @Mapping(target = "employeeIdentifier.employeeId",   source = "employeeId")
+    @Mapping(target = "paymentIdentifier.paymentId",     source = "paymentId")   // ✅ NEW
 
-    // Supplier references
-    @Mapping(target = "supplierIdentifier.supplierId", source = "supplierId")
-
-    // employee references
-    @Mapping(target = "employeeIdentifier.employeeId", source = "employeeId")
-
-    // Pricing
-    @Mapping(target = "price.amount", source = "salePrice")
+    // ─── Price ─────────────────────────────────────────────────────────
+    @Mapping(target = "price.amount",   source = "salePrice")
     @Mapping(target = "price.currency", source = "currency")
 
-    // Dates & Status
-    @Mapping(target = "saleOfferDate", source = "saleOfferDate")
+    // ─── Dates / status ────────────────────────────────────────────────
+    @Mapping(target = "saleOfferDate",  source = "saleOfferDate")
     @Mapping(source = "salePurchaseStatus", target = "salePurchaseStatus")
-    PurchaseOrder requestModelToEntity(PurchaseRequestModel purchaseRequestModel);
+    PurchaseOrder requestModelToEntity(PurchaseRequestModel dto);
 }

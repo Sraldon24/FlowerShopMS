@@ -1,9 +1,6 @@
 package com.champsoft.services.sales.DataLayer.Purchase;
 
-import com.champsoft.services.sales.DataLayer.Identifiers.EmployeeIdentifier;
-import com.champsoft.services.sales.DataLayer.Identifiers.FlowerIdentifier;
-import com.champsoft.services.sales.DataLayer.Identifiers.InventoryIdentifier;
-import com.champsoft.services.sales.DataLayer.Identifiers.SupplierIdentifier;
+import com.champsoft.services.sales.DataLayer.Identifiers.*;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -88,4 +85,10 @@ public class PurchaseOrder {
             @AttributeOverride(name = "employeeId", column = @Column(name = "employee_id"))
     })
     private EmployeeIdentifier employeeIdentifier;
+
+    @Embedded
+    @AttributeOverrides({
+            @AttributeOverride(name = "paymentId", column = @Column(name = "payment_id"))
+    })
+    private PaymentIdentifier paymentIdentifier;   // ✅ new field
 }
