@@ -17,28 +17,26 @@ import static org.springframework.http.HttpStatus.UNPROCESSABLE_ENTITY;
 
 import org.springframework.beans.factory.annotation.Value;
 
-@Component
 @Slf4j
+@Component
 public class PaymentsServiceClient {
 
     private final RestTemplate restTemplate;
     private final ObjectMapper mapper;
-    private final String baseUrl;
+    private final String PAYMENT_SERVICE_BASE_URL;
 
     public PaymentsServiceClient(RestTemplate restTemplate,
                                  ObjectMapper mapper,
-                                 @Value("${payment-service.base-url}") String baseUrl) {
+                                 @Value("${app.payment.base-url}") String gatewayBaseUrl) {
         this.restTemplate = restTemplate;
         this.mapper = mapper;
-        this.baseUrl = baseUrl;
+        this.PAYMENT_SERVICE_BASE_URL = gatewayBaseUrl + "/payments"; // ✅ Same style as Inventory
     }
 
     public PaymentResponseModel getPaymentById(String paymentId) {
+        String url = PAYMENT_SERVICE_BASE_URL + "/" + paymentId;
         try {
-            return restTemplate.getForObject(
-                    baseUrl + "/" + paymentId,
-                    PaymentResponseModel.class
-            );
+            return restTemplate.getForObject(url, PaymentResponseModel.class);
         } catch (HttpClientErrorException ex) {
             throw handleHttpClientException(ex);
         }

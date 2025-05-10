@@ -61,22 +61,47 @@ public class PurchaseOrderServiceImpl implements PurchaseOrderService {
         return purchaseOrders.stream()
                 .map(order -> {
                     var response = responseModelMapper.entityToResponseModel(order);
-                    log.info("Mapped PurchaseOrder {} to PurchaseResponseModel with paymentId {}",
-                            order.getPurchaseOrderIdentifier().getPurchaseId(), response.getPaymentId());
 
                     if (response.getPaymentId() != null) {
                         try {
-                            log.info("Fetching payment details for ID: {}", response.getPaymentId());
                             var payment = paymentsServiceClient.getPaymentById(response.getPaymentId());
-                            log.info("Successfully fetched payment details for ID: {}", response.getPaymentId());
                             response.setPaymentDetails(payment);
                         } catch (Exception ex) {
-                            log.error("Failed to fetch payment for {}: {}", response.getPaymentId(), ex.getMessage());
+                            log.warn("Failed to fetch payment for {}: {}", response.getPaymentId(), ex.getMessage());
                             response.setPaymentDetails(null);
                         }
-                    } else {
-                        log.warn("No paymentId found for purchaseOrderId: {}",
-                                order.getPurchaseOrderIdentifier().getPurchaseId());
+                    }
+
+                    if (response.getInventoryId() != null) {
+                        try {
+                            var inventory = inventoryServiceClient.getInventoryById(response.getInventoryId());
+                            response.setInventoryDetails(inventory);
+                        } catch (Exception ex) {
+                            log.warn("Failed to fetch inventory for {}: {}", response.getInventoryId(), ex.getMessage());
+                            response.setInventoryDetails(null);
+                        }
+                    }
+
+                    if (response.getInventoryId() != null && response.getFlowerIdentificationNumber() != null) {
+                        try {
+                            var flower = inventoryServiceClient.getFlowerByFlowerId(
+                                    response.getInventoryId(),
+                                    response.getFlowerIdentificationNumber());
+                            response.setFlowerDetails(flower);
+                        } catch (Exception ex) {
+                            log.warn("Failed to fetch flower {} for inventory {}: {}", response.getFlowerIdentificationNumber(), response.getInventoryId(), ex.getMessage());
+                            response.setFlowerDetails(null);
+                        }
+                    }
+
+                    if (response.getSupplierId() != null) {
+                        try {
+                            var supplier = suppliersServiceClient.getSupplierBySupplierId(response.getSupplierId());
+                            response.setSupplierDetails(supplier);
+                        } catch (Exception ex) {
+                            log.warn("Failed to fetch supplier {}: {}", response.getSupplierId(), ex.getMessage());
+                            response.setSupplierDetails(null);
+                        }
                     }
 
                     return response;
@@ -86,10 +111,12 @@ public class PurchaseOrderServiceImpl implements PurchaseOrderService {
 
 
 
+
+
     @Override
     public PurchaseResponseModel getPurchaseOrderById(String purchaseId) {
-        PurchaseOrder purchaseOrder =
-                purchaseOrderRepository.findPurchaseOrderByPurchaseOrderIdentifierPurchaseId(purchaseId);
+        PurchaseOrder purchaseOrder = purchaseOrderRepository
+                .findPurchaseOrderByPurchaseOrderIdentifierPurchaseId(purchaseId);
 
         if (purchaseOrder == null) {
             throw new NotFoundException("Purchase Order with ID " + purchaseId + " not found.");
@@ -97,7 +124,6 @@ public class PurchaseOrderServiceImpl implements PurchaseOrderService {
 
         var response = responseModelMapper.entityToResponseModel(purchaseOrder);
 
-        // 🔥 Enrich with payment details
         if (response.getPaymentId() != null) {
             try {
                 var payment = paymentsServiceClient.getPaymentById(response.getPaymentId());
@@ -108,22 +134,66 @@ public class PurchaseOrderServiceImpl implements PurchaseOrderService {
             }
         }
 
+        if (response.getInventoryId() != null) {
+            try {
+                var inventory = inventoryServiceClient.getInventoryById(response.getInventoryId());
+                response.setInventoryDetails(inventory);
+            } catch (Exception ex) {
+                log.warn("Failed to fetch inventory for {}: {}", response.getInventoryId(), ex.getMessage());
+                response.setInventoryDetails(null);
+            }
+        }
+
+        if (response.getInventoryId() != null && response.getFlowerIdentificationNumber() != null) {
+            try {
+                var flower = inventoryServiceClient.getFlowerByFlowerId(
+                        response.getInventoryId(),
+                        response.getFlowerIdentificationNumber());
+                response.setFlowerDetails(flower);
+            } catch (Exception ex) {
+                log.warn("Failed to fetch flower {} for inventory {}: {}", response.getFlowerIdentificationNumber(), response.getInventoryId(), ex.getMessage());
+                response.setFlowerDetails(null);
+            }
+        }
+
+        if (response.getSupplierId() != null) {
+            try {
+                var supplier = suppliersServiceClient.getSupplierBySupplierId(response.getSupplierId());
+                response.setSupplierDetails(supplier);
+            } catch (Exception ex) {
+                log.warn("Failed to fetch supplier {}: {}", response.getSupplierId(), ex.getMessage());
+                response.setSupplierDetails(null);
+            }
+        }
+
         return response;
     }
 
 
+
+
     @Override
     public PurchaseResponseModel addPurchaseOrder(PurchaseRequestModel requestModel) {
+
+        // ✅ Validate supplier
         var supplier = suppliersServiceClient.getSupplierBySupplierId(requestModel.getSupplierId());
         if (supplier == null) {
             throw new NotFoundException("Unknown supplier ID: " + requestModel.getSupplierId());
         }
 
+        // ✅ Validate employee
         var employee = employeesServiceClient.getEmployeeByEmployeeId(requestModel.getEmployeeId());
         if (employee == null) {
             throw new NotFoundException("Unknown employee ID: " + requestModel.getEmployeeId());
         }
 
+        // ✅ Validate inventory
+        var inventory = inventoryServiceClient.getInventoryById(requestModel.getInventoryId());
+        if (inventory == null) {
+            throw new NotFoundException("Unknown inventory ID: " + requestModel.getInventoryId());
+        }
+
+        // ✅ Validate flower (requires inventoryId + flowerId)
         var flower = inventoryServiceClient.getFlowerByFlowerId(
                 requestModel.getInventoryId(),
                 requestModel.getFlowerIdentificationNumber()
@@ -134,6 +204,8 @@ public class PurchaseOrderServiceImpl implements PurchaseOrderService {
                             " is not found in inventory " + requestModel.getInventoryId()
             );
         }
+
+        // ✅ Validate payment (optional)
         if (requestModel.getPaymentId() != null) {
             var payment = paymentsServiceClient.getPaymentById(requestModel.getPaymentId());
             if (payment == null) {
@@ -141,6 +213,7 @@ public class PurchaseOrderServiceImpl implements PurchaseOrderService {
             }
         }
 
+        // ✅ Map request model to entity
         PurchaseOrder purchaseOrder = requestModelMapper.requestModelToEntity(requestModel);
 
         if (purchaseOrder.getPurchaseOrderIdentifier() == null) {
@@ -160,6 +233,7 @@ public class PurchaseOrderServiceImpl implements PurchaseOrderService {
         PurchaseOrder savedOrder = purchaseOrderRepository.save(purchaseOrder);
         return responseModelMapper.entityToResponseModel(savedOrder);
     }
+
 
     @Override
     public PurchaseResponseModel updatePurchaseOrder(String purchaseId, PurchaseRequestModel requestModel) {

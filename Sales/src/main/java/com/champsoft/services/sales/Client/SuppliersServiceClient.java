@@ -26,7 +26,7 @@ public class SuppliersServiceClient {
 
     public SuppliersServiceClient(RestTemplate restTemplate,
                                   ObjectMapper mapper,
-                                  @Value("${app.gateway.base-url}") String gatewayBaseUrl) {
+                                  @Value("${app.supplier.base-url}") String gatewayBaseUrl) {
         this.restTemplate = restTemplate;
         this.mapper = mapper;
         this.SUPPLIER_SERVICE_BASE_URL = gatewayBaseUrl + "/suppliers"; // ✅ Fixed
