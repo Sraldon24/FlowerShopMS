@@ -25,21 +25,33 @@ dependencyManagement {
 }
 
 dependencies {
-    implementation("org.springframework.boot:spring-boot-starter-webflux") // ✅ Reactive Web
-    implementation("org.springframework.cloud:spring-cloud-starter-gateway") // ✅ Spring Cloud Gateway
-    implementation("org.springframework.boot:spring-boot-starter-actuator")
-    implementation("org.springframework.boot:spring-boot-starter-hateoas") // ✅ Added for RepresentationModel
-    implementation("com.fasterxml.jackson.core:jackson-databind")
+    // ✅ Core dependencies
+    implementation("org.springframework.boot:spring-boot-starter-webflux") // For WebFlux support
+    implementation("org.springframework.cloud:spring-cloud-starter-gateway") // API Gateway
+    implementation("org.springframework.boot:spring-boot-starter-actuator") // Health, metrics
+    implementation("org.springframework.boot:spring-boot-starter-hateoas") // HATEOAS
+    implementation("com.fasterxml.jackson.core:jackson-databind") // JSON binding
 
     // ✅ Lombok support
     compileOnly("org.projectlombok:lombok:1.18.30")
     annotationProcessor("org.projectlombok:lombok:1.18.30")
     testCompileOnly("org.projectlombok:lombok:1.18.30")
     testAnnotationProcessor("org.projectlombok:lombok:1.18.30")
+
+    // ✅ Testing dependencies
+    testImplementation("org.springframework.boot:spring-boot-starter-test") {
+        exclude(group = "org.junit.vintage", module = "junit-vintage-engine")
+    }
+    testImplementation("org.mockito:mockito-core:5.11.0")
+    testImplementation("org.mockito:mockito-junit-jupiter:5.11.0")
+    testImplementation("org.springframework:spring-webflux") // For WebTestClient
 }
 
 tasks.named<Test>("test") {
     useJUnitPlatform()
+    testLogging {
+        events("passed", "skipped", "failed") // ✅ Show test results clearly
+    }
 }
 
 // ✅ Make the final JAR name 'app.jar'
