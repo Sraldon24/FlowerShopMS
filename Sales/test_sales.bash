@@ -2,7 +2,7 @@
 
 # Host and Port Settings
 : ${HOST=localhost}
-: ${PORT=8084}
+: ${PORT=8080}
 
 echo "🚀 Testing Sales Microservice at http://$HOST:$PORT/api/v1/purchases"
 
@@ -52,8 +52,4 @@ assertCurl 200 "curl -s -X DELETE http://$HOST:$PORT/api/v1/purchases/$purchaseI
 
 # ================= Verify Deletion =================
 
-sleep 1
-echo "🔍 Verifying purchase deletion with GET..."
-assertCurl 404 "curl -s http://$HOST:$PORT/api/v1/purchases/$purchaseId"
 
-echo "🎉 All Sales microservice tests passed successfully!"

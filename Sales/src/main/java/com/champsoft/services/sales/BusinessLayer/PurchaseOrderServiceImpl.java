@@ -52,7 +52,6 @@ public class PurchaseOrderServiceImpl implements PurchaseOrderService {
         this.paymentsServiceClient = paymentsServiceClient; // ✅ ADD THIS
     }
 
-
     @Override
     public List<PurchaseResponseModel> getAllPurchaseOrders() {
         List<PurchaseOrder> purchaseOrders = purchaseOrderRepository.findAll();
@@ -104,13 +103,20 @@ public class PurchaseOrderServiceImpl implements PurchaseOrderService {
                         }
                     }
 
+                    if (response.getEmployeeId() != null) {
+                        try {
+                            var employee = employeesServiceClient.getEmployeeByEmployeeId(response.getEmployeeId());
+                            response.setEmployeeDetails(employee);
+                        } catch (Exception ex) {
+                            log.warn("Failed to fetch employee {}: {}", response.getEmployeeId(), ex.getMessage());
+                            response.setEmployeeDetails(null);
+                        }
+                    }
+
                     return response;
                 })
                 .collect(Collectors.toList());
     }
-
-
-
 
 
     @Override
@@ -166,8 +172,19 @@ public class PurchaseOrderServiceImpl implements PurchaseOrderService {
             }
         }
 
+        if (response.getEmployeeId() != null) {
+            try {
+                var employee = employeesServiceClient.getEmployeeByEmployeeId(response.getEmployeeId());
+                response.setEmployeeDetails(employee);
+            } catch (Exception ex) {
+                log.warn("Failed to fetch employee {}: {}", response.getEmployeeId(), ex.getMessage());
+                response.setEmployeeDetails(null);
+            }
+        }
+
         return response;
     }
+
 
 
 

@@ -2,7 +2,7 @@
 
 # Host and Port Settings
 : ${HOST=localhost}
-: ${PORT=8081}
+: ${PORT=8080}
 
 echo "🚀 Testing Supplier Microservice at http://$HOST:$PORT/api/v1/suppliers"
 

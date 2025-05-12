@@ -2,6 +2,7 @@ package com.champsoft.services.sales.PresentationLayer;
 
 import com.champsoft.services.sales.DataLayer.Purchase.FinancingAgreementDetails;
 import com.champsoft.services.sales.DataLayer.Purchase.PurchaseStatus;
+import com.champsoft.services.sales.PresentationLayer.employeedtos.EmployeeResponseModel;
 import com.champsoft.services.sales.PresentationLayer.inventorydtos.FlowerResponseModel;
 import com.champsoft.services.sales.PresentationLayer.inventorydtos.InventoryResponseModel;
 import com.champsoft.services.sales.PresentationLayer.paymentdtos.PaymentResponseModel;
@@ -32,6 +33,7 @@ public class PurchaseResponseModel {
 
     // formerly customerId
     private String employeeId;
+    private EmployeeResponseModel employeeDetails;
 
 
     private String paymentId;                        // ✅ ADD
