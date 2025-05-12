@@ -106,3 +106,5 @@ app:
   payment-service:
     host: payment-service
     port: 8080
+  purchase-service:
+    base-url: http://sales-service:8080/api/v1
