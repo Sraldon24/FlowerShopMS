@@ -45,10 +45,10 @@ spring:
       mode: always
       logging:
         enabled: true
-# MOH !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-# ✅ Each service gets its own direct base URL inside Docker
-# when making api gateway make sure to update the clients @Value to @Value("${app.gateway.base-url}")
+
 app:
+  gateway:
+    base-url: http://api-gateway-service:8080/api/v1  # ✅ Fixed here
   payment:
     base-url: http://payment-service:8080/api/v1
   supplier:
