@@ -7,13 +7,14 @@ import org.example.Sales.PresentationLayer.PurchaseRequestModel;
 import org.example.Sales.PresentationLayer.PurchaseResponseModel;
 import org.example.Sales.Utils.HttpErrorInfo;
 import org.example.Sales.Utils.InvalidInputException;
+import org.example.Sales.Utils.LowSalePriceException;
 import org.example.Sales.Utils.NotFoundException;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.*;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
-import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 
@@ -52,8 +53,17 @@ public class PurchaseServiceClient {
 
     public PurchaseResponseModel createPurchase(PurchaseRequestModel model) {
         try {
-            return restTemplate.postForObject(
-                    PURCHASE_SERVICE_BASE_URL + "/purchases", model, PurchaseResponseModel.class);
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.APPLICATION_JSON);
+            HttpEntity<PurchaseRequestModel> request = new HttpEntity<>(model, headers);
+
+            ResponseEntity<PurchaseResponseModel> response = restTemplate.exchange(
+                    PURCHASE_SERVICE_BASE_URL + "/purchases",
+                    HttpMethod.POST,
+                    request,
+                    PurchaseResponseModel.class
+            );
+            return response.getBody();
         } catch (HttpClientErrorException ex) {
             throw handleHttpClientException(ex);
         }
@@ -62,7 +72,7 @@ public class PurchaseServiceClient {
     public PurchaseResponseModel updatePurchase(String id, PurchaseRequestModel model) {
         try {
             restTemplate.put(PURCHASE_SERVICE_BASE_URL + "/purchases/" + id, model);
-            return getPurchaseById(id); // Fetch updated
+            return getPurchaseById(id);
         } catch (HttpClientErrorException ex) {
             throw handleHttpClientException(ex);
         }
@@ -77,11 +87,40 @@ public class PurchaseServiceClient {
     }
 
     private RuntimeException handleHttpClientException(HttpClientErrorException ex) {
+        String rawBody = ex.getResponseBodyAsString();
+        String cleanJson = rawBody;
+
         try {
-            String message = mapper.readValue(ex.getResponseBodyAsString(), HttpErrorInfo.class).getMessage();
-            if (ex.getStatusCode() == NOT_FOUND) return new NotFoundException(message);
-            if (ex.getStatusCode() == UNPROCESSABLE_ENTITY) return new InvalidInputException(message);
-        } catch (IOException ignored) {}
-        return ex;
+            // 🔍 Case 1: if the raw body is a wrapped JSON string like "{\"path\":...}"
+            if (rawBody.startsWith("\"{") && rawBody.endsWith("}\"")) {
+                cleanJson = mapper.readValue(rawBody, String.class); // Unwrap to real JSON
+            }
+
+            // 🧠 Deserialize into real object
+            HttpErrorInfo errorInfo = mapper.readValue(cleanJson, HttpErrorInfo.class);
+
+            String errorMessage = errorInfo.getMessage();
+
+            // 🔥 Map specific known errors
+            if (errorMessage.contains("Sale price must be at least")) {
+                return new LowSalePriceException(errorMessage);
+            }
+
+            if (errorInfo.getHttpStatus() == HttpStatus.NOT_FOUND) {
+                return new NotFoundException(errorMessage);
+            }
+
+            if (errorInfo.getHttpStatus() == HttpStatus.UNPROCESSABLE_ENTITY) {
+                return new InvalidInputException(errorMessage);
+            }
+
+            return new InvalidInputException(errorMessage);
+
+        } catch (Exception e) {
+            // 🧯 Fallback: throw as plain text
+            return new InvalidInputException("Unknown error: " + rawBody);
+        }
     }
+
+
 }

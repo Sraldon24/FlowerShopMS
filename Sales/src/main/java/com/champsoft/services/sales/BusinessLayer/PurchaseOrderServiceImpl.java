@@ -14,6 +14,7 @@ import com.champsoft.services.sales.MapperLayer.PurchaseOrderResponseModelMapper
 import com.champsoft.services.sales.PresentationLayer.PurchaseRequestModel;
 import com.champsoft.services.sales.PresentationLayer.PurchaseResponseModel;
 import com.champsoft.services.sales.utils.Currency;
+import com.champsoft.services.sales.utils.LowSalePriceException;
 import com.champsoft.services.sales.utils.NotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -189,67 +190,74 @@ public class PurchaseOrderServiceImpl implements PurchaseOrderService {
 
 
 
-   /* @Override
-    public PurchaseResponseModel addPurchaseOrder(PurchaseRequestModel requestModel) {
 
-        // ✅ Validate supplier
-        var supplier = suppliersServiceClient.getSupplierBySupplierId(requestModel.getSupplierId());
-        if (supplier == null) {
-            throw new NotFoundException("Unknown supplier ID: " + requestModel.getSupplierId());
-        }
+   /*@Override
+   public PurchaseResponseModel addPurchaseOrder(PurchaseRequestModel requestModel) {
 
-        // ✅ Validate employee
-        var employee = employeesServiceClient.getEmployeeByEmployeeId(requestModel.getEmployeeId());
-        if (employee == null) {
-            throw new NotFoundException("Unknown employee ID: " + requestModel.getEmployeeId());
-        }
+       // ✅ Validate supplier
+       var supplier = suppliersServiceClient.getSupplierBySupplierId(requestModel.getSupplierId());
+       if (supplier == null) {
+           throw new NotFoundException("Unknown supplier ID: " + requestModel.getSupplierId());
+       }
 
-        // ✅ Validate inventory
-        var inventory = inventoryServiceClient.getInventoryById(requestModel.getInventoryId());
-        if (inventory == null) {
-            throw new NotFoundException("Unknown inventory ID: " + requestModel.getInventoryId());
-        }
+       // ✅ Validate employee
+       var employee = employeesServiceClient.getEmployeeByEmployeeId(requestModel.getEmployeeId());
+       if (employee == null) {
+           throw new NotFoundException("Unknown employee ID: " + requestModel.getEmployeeId());
+       }
 
-        // ✅ Validate flower (requires inventoryId + flowerId)
-        var flower = inventoryServiceClient.getFlowerByFlowerId(
-                requestModel.getInventoryId(),
-                requestModel.getFlowerIdentificationNumber()
-        );
-        if (flower == null) {
-            throw new NotFoundException(
-                    "Flower " + requestModel.getFlowerIdentificationNumber() +
-                            " is not found in inventory " + requestModel.getInventoryId()
-            );
-        }
+       // ✅ Validate inventory
+       var inventory = inventoryServiceClient.getInventoryById(requestModel.getInventoryId());
+       if (inventory == null) {
+           throw new NotFoundException("Unknown inventory ID: " + requestModel.getInventoryId());
+       }
 
-        // ✅ Validate payment (optional)
-        if (requestModel.getPaymentId() != null) {
-            var payment = paymentsServiceClient.getPaymentById(requestModel.getPaymentId());
-            if (payment == null) {
-                throw new NotFoundException("Unknown payment ID: " + requestModel.getPaymentId());
-            }
-        }
+       // ✅ Validate flower (requires inventoryId + flowerId)
+       var flower = inventoryServiceClient.getFlowerByFlowerId(
+               requestModel.getInventoryId(),
+               requestModel.getFlowerIdentificationNumber()
+       );
+       if (flower == null) {
+           throw new NotFoundException(
+                   "Flower " + requestModel.getFlowerIdentificationNumber() +
+                           " is not found in inventory " + requestModel.getInventoryId()
+           );
+       }
 
-        // ✅ Map request model to entity
-        PurchaseOrder purchaseOrder = requestModelMapper.requestModelToEntity(requestModel);
+       // ✅ Validate payment (optional)
+       if (requestModel.getPaymentId() != null) {
+           var payment = paymentsServiceClient.getPaymentById(requestModel.getPaymentId());
+           if (payment == null) {
+               throw new NotFoundException("Unknown payment ID: " + requestModel.getPaymentId());
+           }
+       }
 
-        if (purchaseOrder.getPurchaseOrderIdentifier() == null) {
-            purchaseOrder.setPurchaseOrderIdentifier(new PurchaseOrderIdentifier());
-        }
+       // ✅ Validate sale price >= 20.00
+       if (requestModel.getSalePrice() != null && requestModel.getSalePrice().doubleValue() < 20.0) {
+           throw new LowSalePriceException("Sale price must be at least 20.00. Provided: " + requestModel.getSalePrice());
+       }
 
-        if (purchaseOrder.getPrice() == null) {
-            purchaseOrder.setPrice(new Price(BigDecimal.ZERO, Currency.USD));
-        }
+       // ✅ Map request model to entity
+       PurchaseOrder purchaseOrder = requestModelMapper.requestModelToEntity(requestModel);
 
-        if (requestModel.getSalePurchaseStatus() == null) {
-            purchaseOrder.setSalePurchaseStatus(PurchaseStatus.PENDING);
-        } else {
-            purchaseOrder.setSalePurchaseStatus(requestModel.getSalePurchaseStatus());
-        }
+       if (purchaseOrder.getPurchaseOrderIdentifier() == null) {
+           purchaseOrder.setPurchaseOrderIdentifier(new PurchaseOrderIdentifier());
+       }
 
-        PurchaseOrder savedOrder = purchaseOrderRepository.save(purchaseOrder);
-        return responseModelMapper.entityToResponseModel(savedOrder);
-    }*/
+       if (purchaseOrder.getPrice() == null) {
+           purchaseOrder.setPrice(new Price(BigDecimal.ZERO, Currency.USD));
+       }
+
+       if (requestModel.getSalePurchaseStatus() == null) {
+           purchaseOrder.setSalePurchaseStatus(PurchaseStatus.PENDING);
+       } else {
+           purchaseOrder.setSalePurchaseStatus(requestModel.getSalePurchaseStatus());
+       }
+
+       PurchaseOrder savedOrder = purchaseOrderRepository.save(purchaseOrder);
+       PurchaseResponseModel response = responseModelMapper.entityToResponseModel(savedOrder);
+       return enrichPurchaseResponseModel(response);
+   } */
    @Override
    public PurchaseResponseModel addPurchaseOrder(PurchaseRequestModel requestModel) {
 
@@ -291,9 +299,15 @@ public class PurchaseOrderServiceImpl implements PurchaseOrderService {
            }
        }
 
+       // ✅ Validate sale price >= 20.00
+       if (requestModel.getSalePrice() != null && requestModel.getSalePrice().doubleValue() < 20.0) {
+           throw new LowSalePriceException("Sale price must be at least 20.00. Provided: " + requestModel.getSalePrice());
+       }
+
        // ✅ Map request model to entity
        PurchaseOrder purchaseOrder = requestModelMapper.requestModelToEntity(requestModel);
 
+       // Set defaults and enforce business rules
        if (purchaseOrder.getPurchaseOrderIdentifier() == null) {
            purchaseOrder.setPurchaseOrderIdentifier(new PurchaseOrderIdentifier());
        }
@@ -302,15 +316,12 @@ public class PurchaseOrderServiceImpl implements PurchaseOrderService {
            purchaseOrder.setPrice(new Price(BigDecimal.ZERO, Currency.USD));
        }
 
-       if (requestModel.getSalePurchaseStatus() == null) {
-           purchaseOrder.setSalePurchaseStatus(PurchaseStatus.PENDING);
-       } else {
-           purchaseOrder.setSalePurchaseStatus(requestModel.getSalePurchaseStatus());
-       }
+       // 🚨 Enforce status invariant
+       purchaseOrder.setSalePurchaseStatus(PurchaseStatus.PENDING);
 
        PurchaseOrder savedOrder = purchaseOrderRepository.save(purchaseOrder);
        PurchaseResponseModel response = responseModelMapper.entityToResponseModel(savedOrder);
-       return enrichPurchaseResponseModel(response); // ✅ Enrich response
+       return enrichPurchaseResponseModel(response);
    }
 
 
@@ -378,29 +389,60 @@ public class PurchaseOrderServiceImpl implements PurchaseOrderService {
             throw new NotFoundException("No purchase order found with ID " + purchaseId);
         }
 
-        existingOrder.setSaleOfferDate(requestModel.getSaleOfferDate());
-        existingOrder.setSalePurchaseStatus(requestModel.getSalePurchaseStatus());
-
+        // ✅ Validate inventory
         if (requestModel.getInventoryId() != null) {
+            var inventory = inventoryServiceClient.getInventoryById(requestModel.getInventoryId());
+            if (inventory == null) {
+                throw new NotFoundException("Unknown inventory ID: " + requestModel.getInventoryId());
+            }
             existingOrder.setInventoryIdentifier(new InventoryIdentifier(requestModel.getInventoryId()));
         }
 
-        if (requestModel.getFlowerIdentificationNumber() != null) {
+        // ✅ Validate flower
+        if (requestModel.getInventoryId() != null && requestModel.getFlowerIdentificationNumber() != null) {
+            var flower = inventoryServiceClient.getFlowerByFlowerId(
+                    requestModel.getInventoryId(), requestModel.getFlowerIdentificationNumber());
+            if (flower == null) {
+                throw new NotFoundException(
+                        "Flower " + requestModel.getFlowerIdentificationNumber() +
+                                " not found in inventory " + requestModel.getInventoryId());
+            }
             existingOrder.setFlowerIdentifier(new FlowerIdentifier(requestModel.getFlowerIdentificationNumber()));
         }
 
-        if (requestModel.getPaymentId() != null) {
-            existingOrder.setPaymentIdentifier(new PaymentIdentifier(requestModel.getPaymentId()));
-        }
-
+        // ✅ Validate supplier
         if (requestModel.getSupplierId() != null) {
+            var supplier = suppliersServiceClient.getSupplierBySupplierId(requestModel.getSupplierId());
+            if (supplier == null) {
+                throw new NotFoundException("Unknown supplier ID: " + requestModel.getSupplierId());
+            }
             existingOrder.setSupplierIdentifier(new SupplierIdentifier(requestModel.getSupplierId()));
         }
 
+        // ✅ Validate employee
         if (requestModel.getEmployeeId() != null) {
+            var employee = employeesServiceClient.getEmployeeByEmployeeId(requestModel.getEmployeeId());
+            if (employee == null) {
+                throw new NotFoundException("Unknown employee ID: " + requestModel.getEmployeeId());
+            }
             existingOrder.setEmployeeIdentifier(new EmployeeIdentifier(requestModel.getEmployeeId()));
         }
 
+        // ✅ Validate payment
+        if (requestModel.getPaymentId() != null) {
+            var payment = paymentsServiceClient.getPaymentById(requestModel.getPaymentId());
+            if (payment == null) {
+                throw new NotFoundException("Unknown payment ID: " + requestModel.getPaymentId());
+            }
+            existingOrder.setPaymentIdentifier(new PaymentIdentifier(requestModel.getPaymentId()));
+        }
+
+        // ✅ Validate sale price
+        if (requestModel.getSalePrice() != null && requestModel.getSalePrice().doubleValue() < 20.0) {
+            throw new LowSalePriceException("Sale price must be at least 20.00. Provided: " + requestModel.getSalePrice());
+        }
+
+        // ✅ Set price
         if (requestModel.getSalePrice() != null && requestModel.getCurrency() != null) {
             existingOrder.setPrice(new Price(
                     BigDecimal.valueOf(requestModel.getSalePrice()),
@@ -408,21 +450,23 @@ public class PurchaseOrderServiceImpl implements PurchaseOrderService {
             ));
         }
 
+        // ✅ Set offer date and status
+        existingOrder.setSaleOfferDate(requestModel.getSaleOfferDate());
+        existingOrder.setSalePurchaseStatus(requestModel.getSalePurchaseStatus());
+
+        // ✅ Update financing
         if (requestModel.getFinancingAgreementDetails() != null) {
             existingOrder.getFinancingAgreementDetails().setNumberOfMonthlyPayments(
-                    requestModel.getFinancingAgreementDetails().getNumberOfMonthlyPayments()
-            );
+                    requestModel.getFinancingAgreementDetails().getNumberOfMonthlyPayments());
             existingOrder.getFinancingAgreementDetails().setMonthlyPaymentAmount(
-                    requestModel.getFinancingAgreementDetails().getMonthlyPaymentAmount()
-            );
+                    requestModel.getFinancingAgreementDetails().getMonthlyPaymentAmount());
             existingOrder.getFinancingAgreementDetails().setDownPaymentAmount(
-                    requestModel.getFinancingAgreementDetails().getDownPaymentAmount()
-            );
+                    requestModel.getFinancingAgreementDetails().getDownPaymentAmount());
         }
 
         PurchaseOrder updatedOrder = purchaseOrderRepository.save(existingOrder);
         PurchaseResponseModel response = responseModelMapper.entityToResponseModel(updatedOrder);
-        return enrichPurchaseResponseModel(response); // ✅ Enrich response
+        return enrichPurchaseResponseModel(response);
     }
 
 
