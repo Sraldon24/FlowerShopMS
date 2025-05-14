@@ -17,7 +17,7 @@ import java.util.List;
 public class FlowerController {
 
     private final FlowerServiceImpl flowerService;
-    private static final int UUID_SIZE = 17; // ex: flw-123456789abcd
+
 
     @GetMapping
     public ResponseEntity<List<FlowerResponseModel>> getFlowers() {
@@ -37,7 +37,6 @@ public class FlowerController {
     @PutMapping("/{flowerId}")
     public ResponseEntity<FlowerResponseModel> updateFlower(@PathVariable String flowerId,
                                                             @RequestBody FlowerRequestModel model) {
-        if (flowerId.length() != UUID_SIZE) throw new InvalidInputException("Invalid flower ID");
         return ResponseEntity.ok(flowerService.updateFlower(flowerId, model));
     }
 
