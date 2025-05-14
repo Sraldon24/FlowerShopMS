@@ -5,8 +5,6 @@ services:
   suppliers-service:
     build: ./Suppliers
     container_name: suppliers-service
-    ports:
-      - "8081:8080"
     environment:
       SPRING_PROFILES_ACTIVE: docker
     depends_on:
@@ -16,8 +14,6 @@ services:
   suppliers-db:
     image: mongo:6.0
     container_name: suppliers-db
-    ports:
-      - "27017:27017"
     environment:
       MONGO_INITDB_ROOT_USERNAME: user
       MONGO_INITDB_ROOT_PASSWORD: pwd
@@ -32,8 +28,6 @@ services:
   inventory-service:
     build: ./Inventory
     container_name: inventory-service
-    ports:
-      - "8082:8080"
     environment:
       SPRING_PROFILES_ACTIVE: docker
     depends_on:
@@ -43,8 +37,6 @@ services:
   inventory-db:
     image: mysql:8.0
     container_name: inventory-db
-    ports:
-      - "3308:3306"
     environment:
       MYSQL_ROOT_PASSWORD: verysecretpwd
       MYSQL_DATABASE: inventory-db
@@ -61,8 +53,6 @@ services:
   employee-service:
     build: ./Employee
     container_name: employee-service
-    ports:
-      - "8083:8080"
     environment:
       SPRING_PROFILES_ACTIVE: docker
     depends_on:
@@ -72,8 +62,6 @@ services:
   employee-db:
     image: postgres:16
     container_name: employee-db
-    ports:
-      - "5433:5432"
     environment:
       POSTGRES_DB: employee-db
       POSTGRES_USER: user
@@ -89,8 +77,6 @@ services:
   sales-service:
     build: ./Sales
     container_name: sales-service
-    ports:
-      - "8084:8080"
     environment:
       SPRING_PROFILES_ACTIVE: docker
     depends_on:
@@ -100,8 +86,6 @@ services:
   sales-db:
     image: mysql:8.0
     container_name: sales-db
-    ports:
-      - "3310:3306"
     environment:
       MYSQL_ROOT_PASSWORD: verysecretpwd
       MYSQL_DATABASE: sales-db
@@ -118,8 +102,6 @@ services:
   payment-service:
     build: ./Payment
     container_name: payment-service
-    ports:
-      - "8085:8080"
     environment:
       SPRING_PROFILES_ACTIVE: docker
     depends_on:
@@ -129,8 +111,6 @@ services:
   payment-db:
     image: postgres:16
     container_name: payment-db
-    ports:
-      - "5434:5432"
     environment:
       POSTGRES_DB: payment-db
       POSTGRES_USER: user
@@ -147,7 +127,7 @@ services:
     build: ./api-gateway-service
     container_name: api-gateway-service
     ports:
-      - "8080:8080"
+      - "8080:8080"  # ✅ Only exposed service
     environment:
       SPRING_PROFILES_ACTIVE: docker
     depends_on:
