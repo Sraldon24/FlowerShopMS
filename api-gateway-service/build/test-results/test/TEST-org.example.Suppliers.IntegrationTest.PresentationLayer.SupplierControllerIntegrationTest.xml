@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="org.example.Suppliers.IntegrationTest.PresentationLayer.SupplierControllerIntegrationTest" tests="2" skipped="0" failures="0" errors="0" timestamp="2025-05-12T23:23:52.292Z" hostname="DESKTOP-2BUQL1I" time="0.859">
+<testsuite name="org.example.Suppliers.IntegrationTest.PresentationLayer.SupplierControllerIntegrationTest" tests="2" skipped="0" failures="0" errors="0" timestamp="2025-05-14T13:34:05.949Z" hostname="DESKTOP-2BUQL1I" time="0.852">
   <properties/>
-  <testcase name="testAddSupplier_returnsCreated()" classname="org.example.Suppliers.IntegrationTest.PresentationLayer.SupplierControllerIntegrationTest" time="0.842"/>
-  <testcase name="testAddSupplier_invalidPassword_returnsCreatedBecauseServiceIsMocked()" classname="org.example.Suppliers.IntegrationTest.PresentationLayer.SupplierControllerIntegrationTest" time="0.013"/>
-  <system-out><![CDATA[19:23:44.925 [Test worker] INFO org.springframework.test.context.support.AnnotationConfigContextLoaderUtils -- Could not detect default configuration classes for test class [org.example.Suppliers.IntegrationTest.PresentationLayer.SupplierControllerIntegrationTest]: SupplierControllerIntegrationTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
-19:23:45.201 [Test worker] INFO org.springframework.boot.test.context.SpringBootTestContextBootstrapper -- Found @SpringBootConfiguration org.example.ApiGatewayServiceApplication for test class org.example.Suppliers.IntegrationTest.PresentationLayer.SupplierControllerIntegrationTest
+  <testcase name="testAddSupplier_returnsCreated()" classname="org.example.Suppliers.IntegrationTest.PresentationLayer.SupplierControllerIntegrationTest" time="0.833"/>
+  <testcase name="testAddSupplier_invalidPassword_returnsCreatedBecauseServiceIsMocked()" classname="org.example.Suppliers.IntegrationTest.PresentationLayer.SupplierControllerIntegrationTest" time="0.014"/>
+  <system-out><![CDATA[09:33:58.277 [Test worker] INFO org.springframework.test.context.support.AnnotationConfigContextLoaderUtils -- Could not detect default configuration classes for test class [org.example.Suppliers.IntegrationTest.PresentationLayer.SupplierControllerIntegrationTest]: SupplierControllerIntegrationTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+09:33:58.600 [Test worker] INFO org.springframework.boot.test.context.SpringBootTestContextBootstrapper -- Found @SpringBootConfiguration org.example.ApiGatewayServiceApplication for test class org.example.Suppliers.IntegrationTest.PresentationLayer.SupplierControllerIntegrationTest
 
   .   ____          _            __ _ _
  /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
@@ -15,9 +15,9 @@
 
  :: Spring Boot ::                (v3.3.3)
 
-2025-05-12T19:23:47.620-04:00  INFO 34428 --- [api-gateway] [    Test worker] .S.I.P.SupplierControllerIntegrationTest : Starting SupplierControllerIntegrationTest using Java 17.0.12 with PID 34428 (started by Mohamed Lhamidi in C:\Users\Mohamed Lhamidi\Documents\Web Service\FlowerShop_Final\api-gateway-service)
-2025-05-12T19:23:47.624-04:00  INFO 34428 --- [api-gateway] [    Test worker] .S.I.P.SupplierControllerIntegrationTest : No active profile set, falling back to 1 default profile: "default"
-2025-05-12T19:23:52.259-04:00  INFO 34428 --- [api-gateway] [    Test worker] .S.I.P.SupplierControllerIntegrationTest : Started SupplierControllerIntegrationTest in 6.885 seconds (process running for 9.465)
+2025-05-14T09:34:00.931-04:00  INFO 17040 --- [api-gateway] [    Test worker] .S.I.P.SupplierControllerIntegrationTest : Starting SupplierControllerIntegrationTest using Java 17.0.12 with PID 17040 (started by Mohamed Lhamidi in C:\Users\Mohamed Lhamidi\Documents\Web Service\FlowerShop_Final\api-gateway-service)
+2025-05-14T09:34:00.933-04:00  INFO 17040 --- [api-gateway] [    Test worker] .S.I.P.SupplierControllerIntegrationTest : No active profile set, falling back to 1 default profile: "default"
+2025-05-14T09:34:05.915-04:00  INFO 17040 --- [api-gateway] [    Test worker] .S.I.P.SupplierControllerIntegrationTest : Started SupplierControllerIntegrationTest in 7.116 seconds (process running for 9.823)
 ]]></system-out>
   <system-err><![CDATA[]]></system-err>
 </testsuite>
