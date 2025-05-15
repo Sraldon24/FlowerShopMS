@@ -1,8 +1,9 @@
 plugins {
     id("java")
-    id("org.springframework.boot") version "3.3.3" // ✅ Spring Boot version
+    id("org.springframework.boot") version "3.3.3"
     id("io.spring.dependency-management") version "1.1.7"
-    id("io.freefair.lombok") version "8.4" // ✅ Lombok plugin
+    id("io.freefair.lombok") version "8.4"
+    id("jacoco")
 }
 
 group = "com.champsoft.services"
@@ -53,8 +54,26 @@ tasks.named<Test>("test") {
         events("passed", "skipped", "failed") // ✅ Show test results clearly
     }
 }
+tasks.jacocoTestReport {
+    dependsOn(tasks.test)
+    reports {
+        xml.required.set(true)
+        html.required.set(true)
+    }
+}
 
-// ✅ Make the final JAR name 'app.jar'
+tasks.jacocoTestCoverageVerification {
+    dependsOn(tasks.test)
+
+    violationRules {
+        rule {
+            limit {
+                minimum = "0.80".toBigDecimal()
+            }
+        }
+    }
+}
+
 tasks.named<org.springframework.boot.gradle.tasks.bundling.BootJar>("bootJar") {
     archiveFileName.set("app.jar")
 }
