@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="org.example.Inventory.IntegrationTesting.Inventory.InventoryControllerIntegrationTest" tests="5" skipped="0" failures="0" errors="0" timestamp="2025-05-14T23:46:35.620Z" hostname="DESKTOP-2BUQL1I" time="0.069">
+  <properties/>
+  <testcase name="testAddInventory_returnsCreated()" classname="org.example.Inventory.IntegrationTesting.Inventory.InventoryControllerIntegrationTest" time="0.022"/>
+  <testcase name="testGetInventoryById_returnsSingle()" classname="org.example.Inventory.IntegrationTesting.Inventory.InventoryControllerIntegrationTest" time="0.01"/>
+  <testcase name="testGetInventories_returnsList()" classname="org.example.Inventory.IntegrationTesting.Inventory.InventoryControllerIntegrationTest" time="0.009"/>
+  <testcase name="testUpdateInventory_returnsUpdated()" classname="org.example.Inventory.IntegrationTesting.Inventory.InventoryControllerIntegrationTest" time="0.011"/>
+  <testcase name="testDeleteInventory_returnsSuccessMessage()" classname="org.example.Inventory.IntegrationTesting.Inventory.InventoryControllerIntegrationTest" time="0.009"/>
+  <system-out><![CDATA[2025-05-14T19:46:33.851-04:00  INFO 6680 --- [api-gateway] [    Test worker] t.c.s.AnnotationConfigContextLoaderUtils : Could not detect default configuration classes for test class [org.example.Inventory.IntegrationTesting.Inventory.InventoryControllerIntegrationTest]: InventoryControllerIntegrationTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+2025-05-14T19:46:33.907-04:00  INFO 6680 --- [api-gateway] [    Test worker] .b.t.c.SpringBootTestContextBootstrapper : Found @SpringBootConfiguration org.example.ApiGatewayServiceApplication for test class org.example.Inventory.IntegrationTesting.Inventory.InventoryControllerIntegrationTest
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+
+ :: Spring Boot ::                (v3.3.3)
+
+2025-05-14T19:46:35.220-04:00  INFO 6680 --- [api-gateway] [    Test worker] I.I.I.InventoryControllerIntegrationTest : Starting InventoryControllerIntegrationTest using Java 17.0.12 with PID 6680 (started by Mohamed Lhamidi in C:\Users\Mohamed Lhamidi\Documents\Web Service\FlowerShop_Final\api-gateway-service)
+2025-05-14T19:46:35.221-04:00  INFO 6680 --- [api-gateway] [    Test worker] I.I.I.InventoryControllerIntegrationTest : No active profile set, falling back to 1 default profile: "default"
+2025-05-14T19:46:35.626-04:00  INFO 6680 --- [api-gateway] [    Test worker] I.I.I.InventoryControllerIntegrationTest : Started InventoryControllerIntegrationTest in 1.711 seconds (process running for 10.735)
+]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

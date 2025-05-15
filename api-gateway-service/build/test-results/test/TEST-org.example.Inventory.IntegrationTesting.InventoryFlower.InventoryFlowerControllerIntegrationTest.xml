@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="org.example.Inventory.IntegrationTesting.InventoryFlower.InventoryFlowerControllerIntegrationTest" tests="2" skipped="0" failures="0" errors="0" timestamp="2025-05-14T23:46:37.318Z" hostname="DESKTOP-2BUQL1I" time="0.028">
+  <properties/>
+  <testcase name="testGetFlowersInInventory_returnsList()" classname="org.example.Inventory.IntegrationTesting.InventoryFlower.InventoryFlowerControllerIntegrationTest" time="0.018"/>
+  <testcase name="testGetInventoryFlowerById_returnsSingleFlower()" classname="org.example.Inventory.IntegrationTesting.InventoryFlower.InventoryFlowerControllerIntegrationTest" time="0.008"/>
+  <system-out><![CDATA[2025-05-14T19:46:35.707-04:00  INFO 6680 --- [api-gateway] [    Test worker] t.c.s.AnnotationConfigContextLoaderUtils : Could not detect default configuration classes for test class [org.example.Inventory.IntegrationTesting.InventoryFlower.InventoryFlowerControllerIntegrationTest]: InventoryFlowerControllerIntegrationTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+2025-05-14T19:46:35.744-04:00  INFO 6680 --- [api-gateway] [    Test worker] .b.t.c.SpringBootTestContextBootstrapper : Found @SpringBootConfiguration org.example.ApiGatewayServiceApplication for test class org.example.Inventory.IntegrationTesting.InventoryFlower.InventoryFlowerControllerIntegrationTest
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+
+ :: Spring Boot ::                (v3.3.3)
+
+2025-05-14T19:46:37.006-04:00  INFO 6680 --- [api-gateway] [    Test worker] InventoryFlowerControllerIntegrationTest : Starting InventoryFlowerControllerIntegrationTest using Java 17.0.12 with PID 6680 (started by Mohamed Lhamidi in C:\Users\Mohamed Lhamidi\Documents\Web Service\FlowerShop_Final\api-gateway-service)
+2025-05-14T19:46:37.006-04:00  INFO 6680 --- [api-gateway] [    Test worker] InventoryFlowerControllerIntegrationTest : No active profile set, falling back to 1 default profile: "default"
+2025-05-14T19:46:37.315-04:00  INFO 6680 --- [api-gateway] [    Test worker] InventoryFlowerControllerIntegrationTest : Started InventoryFlowerControllerIntegrationTest in 1.565 seconds (process running for 12.427)
+]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="org.example.Payment.PresentationLayer.PaymentControllerIntegrationTest" tests="5" skipped="0" failures="0" errors="0" timestamp="2025-05-14T23:46:38.972Z" hostname="DESKTOP-2BUQL1I" time="0.069">
+  <properties/>
+  <testcase name="testUpdatePayment_returnsUpdated()" classname="org.example.Payment.PresentationLayer.PaymentControllerIntegrationTest" time="0.031"/>
+  <testcase name="testGetPaymentById_returnsPayment()" classname="org.example.Payment.PresentationLayer.PaymentControllerIntegrationTest" time="0.007"/>
+  <testcase name="testGetPayments_returnsList()" classname="org.example.Payment.PresentationLayer.PaymentControllerIntegrationTest" time="0.009"/>
+  <testcase name="testAddPayment_returnsCreated()" classname="org.example.Payment.PresentationLayer.PaymentControllerIntegrationTest" time="0.008"/>
+  <testcase name="testDeletePayment_returnsSuccessMessage()" classname="org.example.Payment.PresentationLayer.PaymentControllerIntegrationTest" time="0.006"/>
+  <system-out><![CDATA[2025-05-14T19:46:37.359-04:00  INFO 6680 --- [api-gateway] [    Test worker] t.c.s.AnnotationConfigContextLoaderUtils : Could not detect default configuration classes for test class [org.example.Payment.PresentationLayer.PaymentControllerIntegrationTest]: PaymentControllerIntegrationTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+2025-05-14T19:46:37.385-04:00  INFO 6680 --- [api-gateway] [    Test worker] .b.t.c.SpringBootTestContextBootstrapper : Found @SpringBootConfiguration org.example.ApiGatewayServiceApplication for test class org.example.Payment.PresentationLayer.PaymentControllerIntegrationTest
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+
+ :: Spring Boot ::                (v3.3.3)
+
+2025-05-14T19:46:38.656-04:00  INFO 6680 --- [api-gateway] [    Test worker] o.e.P.P.PaymentControllerIntegrationTest : Starting PaymentControllerIntegrationTest using Java 17.0.12 with PID 6680 (started by Mohamed Lhamidi in C:\Users\Mohamed Lhamidi\Documents\Web Service\FlowerShop_Final\api-gateway-service)
+2025-05-14T19:46:38.656-04:00  INFO 6680 --- [api-gateway] [    Test worker] o.e.P.P.PaymentControllerIntegrationTest : No active profile set, falling back to 1 default profile: "default"
+2025-05-14T19:46:38.972-04:00  INFO 6680 --- [api-gateway] [    Test worker] o.e.P.P.PaymentControllerIntegrationTest : Started PaymentControllerIntegrationTest in 1.572 seconds (process running for 14.081)
+]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

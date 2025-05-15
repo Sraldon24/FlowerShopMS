@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="org.example.Suppliers.IntegrationTest.PresentationLayer.SupplierControllerIntegrationTest" tests="5" skipped="0" failures="0" errors="0" timestamp="2025-05-14T23:46:42.320Z" hostname="DESKTOP-2BUQL1I" time="0.061">
+  <properties/>
+  <testcase name="testGetSupplierById_returnsSupplier()" classname="org.example.Suppliers.IntegrationTest.PresentationLayer.SupplierControllerIntegrationTest" time="0.014"/>
+  <testcase name="testAddSupplier_returnsCreated()" classname="org.example.Suppliers.IntegrationTest.PresentationLayer.SupplierControllerIntegrationTest" time="0.017"/>
+  <testcase name="testUpdateSupplier_returnsUpdated()" classname="org.example.Suppliers.IntegrationTest.PresentationLayer.SupplierControllerIntegrationTest" time="0.01"/>
+  <testcase name="testGetAllSuppliers_returnsList()" classname="org.example.Suppliers.IntegrationTest.PresentationLayer.SupplierControllerIntegrationTest" time="0.007"/>
+  <testcase name="testDeleteSupplier_returnsSuccessMessage()" classname="org.example.Suppliers.IntegrationTest.PresentationLayer.SupplierControllerIntegrationTest" time="0.006"/>
+  <system-out><![CDATA[2025-05-14T19:46:40.714-04:00  INFO 6680 --- [api-gateway] [    Test worker] t.c.s.AnnotationConfigContextLoaderUtils : Could not detect default configuration classes for test class [org.example.Suppliers.IntegrationTest.PresentationLayer.SupplierControllerIntegrationTest]: SupplierControllerIntegrationTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+2025-05-14T19:46:40.747-04:00  INFO 6680 --- [api-gateway] [    Test worker] .b.t.c.SpringBootTestContextBootstrapper : Found @SpringBootConfiguration org.example.ApiGatewayServiceApplication for test class org.example.Suppliers.IntegrationTest.PresentationLayer.SupplierControllerIntegrationTest
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+
+ :: Spring Boot ::                (v3.3.3)
+
+2025-05-14T19:46:42.033-04:00  INFO 6680 --- [api-gateway] [    Test worker] .S.I.P.SupplierControllerIntegrationTest : Starting SupplierControllerIntegrationTest using Java 17.0.12 with PID 6680 (started by Mohamed Lhamidi in C:\Users\Mohamed Lhamidi\Documents\Web Service\FlowerShop_Final\api-gateway-service)
+2025-05-14T19:46:42.033-04:00  INFO 6680 --- [api-gateway] [    Test worker] .S.I.P.SupplierControllerIntegrationTest : No active profile set, falling back to 1 default profile: "default"
+2025-05-14T19:46:42.316-04:00  INFO 6680 --- [api-gateway] [    Test worker] .S.I.P.SupplierControllerIntegrationTest : Started SupplierControllerIntegrationTest in 1.559 seconds (process running for 17.439)
+]]>&#x1f50d;<![CDATA[ RESPONSE BODY: null
+]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>
