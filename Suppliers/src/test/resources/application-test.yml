@@ -7,3 +7,7 @@ spring:
       password: pwd
       database: suppliers-test-db
       authentication-database: admin
+
+  test:
+    database:
+      replace: none
