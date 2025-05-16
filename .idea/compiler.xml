@@ -12,6 +12,11 @@
         <module name="api-gateway-service.main" />
       </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="FlowerShopMS" target="17" />
+      <module name="FlowerShopMS.main" target="17" />
+      <module name="FlowerShopMS.test" target="17" />
+    </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
