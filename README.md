@@ -44,7 +44,7 @@ This project demonstrates **modern microservices architecture** with real-world 
 
 ---
 
-📖 Learnings
+## 📖 Learnings
 
 This project provided hands-on experience with:
 
@@ -71,6 +71,7 @@ cd FlowerShopMS
 
 # Start containers
 docker-compose up --build
+
 
 
 
