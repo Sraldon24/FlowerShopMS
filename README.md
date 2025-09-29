@@ -44,6 +44,18 @@ This project demonstrates **modern microservices architecture** with real-world 
 
 ---
 
+📖 Learnings
+
+This project provided hands-on experience with:
+
+Designing scalable microservices systems.
+
+Managing multi-database integration.
+
+Using containerization and orchestration for real-world deployment.
+
+Applying Agile Scrum methodology in a team project.
+
 ---
 
 ## ⚡ Getting Started
@@ -59,5 +71,6 @@ cd FlowerShopMS
 
 # Start containers
 docker-compose up --build
+
 
 
